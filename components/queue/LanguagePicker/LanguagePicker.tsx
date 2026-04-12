@@ -1,8 +1,7 @@
 import { useTranslation } from "next-i18next";
 import * as React from "react";
 import { useCookies } from "react-cookie";
-import { updateUserLanguageMutation } from "../../../graphql/mutations/user";
-import graphClient from "../../../helpers/GQLClient";
+import apiClient from "../../../helpers/APIClient";
 import PrimaryHeader from "../../layout/PrimaryHeader/PrimaryHeader";
 
 import { LanguagePickerProps } from "./LanguagePicker.d";
@@ -16,7 +15,7 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({
   const [cookies, setCookie] = useCookies(["coUserToken", "coUserLng"]);
   const token = cookies.coUserToken;
 
-  const gqlClient = graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
   // https://coolors.co/a4036f-048ba8-16db93-efea5a-f29e4c
   const supportedLanguages = [
@@ -25,7 +24,7 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({
   ];
 
   const selectLanguage = async (lng) => {
-    await graphClient.client.request(updateUserLanguageMutation, {
+    await apiClient.post("/user/language", {
       language: lng,
     });
 

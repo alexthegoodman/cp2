@@ -1,12 +1,10 @@
-import request from "graphql-request";
+
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import useSWR, { SWRConfig } from "swr";
 import Utilities from "@/lib";
 import { cpGraphqlUrl } from "../../def/urls";
-import { postsByUsernameQuery } from "../../graphql/queries/post";
-import { userByUsernameQuery } from "../../graphql/queries/user";
 import nextI18nextConfig from "../../next-i18next.config";
 import { ProfileContent } from "../profile";
 

@@ -1,4 +1,4 @@
-import request from "graphql-request";
+
 import type { NextPage } from "next";
 import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
@@ -7,7 +7,6 @@ import { useCookies } from "react-cookie";
 import PrimaryHeader from "../components/layout/PrimaryHeader/PrimaryHeader";
 import ProfileIntro from "../components/profile/ProfileIntro/ProfileIntro";
 import ProfilePosts from "../components/profile/ProfilePosts/ProfilePosts";
-import { userQuery } from "../graphql/queries/user";
 import Utilities from "@/lib";
 import { cpDomain } from "../def/urls";
 import { NextSeo } from "next-seo";
@@ -16,14 +15,12 @@ import DesktopNavigation from "../components/layout/DesktopNavigation/DesktopNav
 import { GQLClient } from "@/lib/GQLClient";
 import nextI18nextConfig from "../next-i18next.config";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import graphClient from "../helpers/GQLClient";
+import apiClient from "../helpers/APIClient";
 
 const getUserData = async (token) => {
-  const gqlClient = graphClient.setupClient(token);
-
-  const userData = await graphClient.client.request(userQuery);
-
-  return userData;
+  apiClient.setupClient(token);
+  const userData = await apiClient.get("/user");
+  return { getUser: userData };
 };
 
 export const ProfileContent = ({ data, mutate, usersOwnProfile = false }) => {

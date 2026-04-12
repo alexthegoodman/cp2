@@ -1,4 +1,4 @@
-import request from "graphql-request";
+
 import { DateTime } from "luxon";
 import type { NextPage } from "next";
 import { NextSeo } from "next-seo";
@@ -10,40 +10,21 @@ import DesktopNavigation from "../../../components/layout/DesktopNavigation/Desk
 import PostImpressions from "../../../components/post/PostImpressions/PostImpressions";
 import PrimaryHeader from "../../../components/layout/PrimaryHeader/PrimaryHeader";
 import { cpDomain, cpGraphqlUrl } from "../../../def/urls";
-import { postImpressionsQuery } from "../../../graphql/queries/message";
-import { postByPostTitleQuery } from "../../../graphql/queries/post";
-import { userByPostTitleQuery } from "../../../graphql/queries/user";
 import { useImageUrl } from "../../../hooks/useImageUrl";
 import { useRouterBack } from "../../../hooks/useRouterBack";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import nextI18nextConfig from "../../../next-i18next.config";
 import Utilities from "@/lib";
-import graphClient from "../../../helpers/GQLClient";
+import apiClient from "../../../helpers/APIClient";
 import { useCookies } from "react-cookie";
 
 const getPostAndUserData = async (token, postTitle) => {
   console.info("getPostAndUserData", token);
-  graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
-  const postData = await graphClient.client.request(postByPostTitleQuery, {
-    postTitle,
-  });
+  const postData = await apiClient.get(`/posts/${postTitle}`);
 
-  // const impressionData = await request(cpGraphqlUrl, postImpressionsQuery, {
-  //   postTitle,
-  // });
-
-  const userData = await graphClient.client.request(userByPostTitleQuery, {
-    postTitle,
-  });
-
-  const returnData = {
-    ...postData.getPostByPostTitle,
-    creator: userData.getUserByPostTitle,
-    // impressions: impressionData.getPostImpressions,
-  };
-
-  return returnData;
+  return postData;
 };
 
 const PostContent = ({ data }) => {

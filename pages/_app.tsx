@@ -3,14 +3,12 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import Script from "next/script";
 import { useEffect } from "react";
-import { createPageViewMutation } from "../graphql/mutations/pageview";
-import { GQLClient } from "@/lib/GQLClient";
 // import * as FullStory from "@fullstory/browser";
 // import LogRocket from "logrocket";
 import { appWithTranslation } from "next-i18next";
 import nextI18NextConfig from "../next-i18next.config.js";
 import { useCookies } from "react-cookie";
-import graphClient from "../helpers/GQLClient";
+import apiClient from "../helpers/APIClient";
 import { GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
 
 // LogRocket.init("binhki/commonplace-dev");
@@ -21,12 +19,12 @@ var pixelInitialized = false;
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [cookies] = useCookies(["coUserToken"]);
-  const gqlClient = graphClient.setupClient(cookies["coUserToken"]);
+  const client = apiClient.setupClient(cookies["coUserToken"]);
 
   usePageViews();
 
   const createPageView = async () => {
-    await graphClient.client.request(createPageViewMutation, {
+    await apiClient.post("/pageview", {
       url: location.pathname,
     });
   };

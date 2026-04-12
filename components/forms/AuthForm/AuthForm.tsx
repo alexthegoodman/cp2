@@ -1,4 +1,4 @@
-import request from "graphql-request";
+
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useCookies } from "react-cookie";
@@ -7,13 +7,11 @@ import { cpDomain, cpGraphqlUrl } from "../../../def/urls";
 const { DateTime } = require("luxon");
 // import LogRocket from "logrocket";
 
-import { authenticateQuery } from "../../../graphql/queries/user";
 import FormInput from "../../fields/FormInput/FormInput";
 import FormMessage from "../../fields/FormMessage/FormMessage";
 
 import { AuthFormProps } from "./AuthForm.d";
 import Utilities from "@/lib";
-import { registerMutation } from "../../../graphql/mutations/user";
 import { CookieSettings } from "../../../pages/settings";
 import { useTranslation } from "next-i18next";
 import MixpanelBrowser from "../../../helpers/MixpanelBrowser";

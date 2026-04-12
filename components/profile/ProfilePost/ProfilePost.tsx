@@ -1,11 +1,10 @@
-import request from "graphql-request";
+
 import { DateTime } from "luxon";
 import Link from "next/link";
 import * as React from "react";
 import { useCookies } from "react-cookie";
 import { cpDomainwp } from "../../../def/urls";
-import graphClient from "../../../helpers/GQLClient";
-import { deletePostMutation } from "../../../graphql/mutations/post";
+import apiClient from "../../../helpers/APIClient";
 import ContentViewer from "../../post/ContentViewer/ContentViewer";
 import PopupModal from "../../utility/PopupModal/PopupModal";
 
@@ -25,7 +24,7 @@ const ProfilePost: React.FC<ProfilePostProps> = ({
   const [cookies] = useCookies(["coUserToken"]);
   const token = cookies.coUserToken;
 
-  const gqlClient = graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
   const [displayOptionsMenu, setDisplayOptionsMenu] = React.useState(false);
   const [deletePostId, setDeletePostId] = React.useState(null);
@@ -35,12 +34,10 @@ const ProfilePost: React.FC<ProfilePostProps> = ({
   const postUrl = strings.getPostUrl(post);
 
   const deletePost = async () => {
-    await graphClient.client.request(deletePostMutation, {
-      postTitleSlug: post?.generatedTitleSlug,
-    });
+    await apiClient.delete(`/posts/${post?.generatedTitleSlug}`);
 
     setDeletePostId(null);
-    mutate();
+    if (mutate) mutate();
   };
 
   return (

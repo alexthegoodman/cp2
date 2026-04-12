@@ -18,7 +18,15 @@ export default async function handler(
     if (!currentUser) {
       return res.status(401).json({ error: "Unauthorized" });
     }
-    return res.status(200).json(currentUser);
+    const userWithPosts = await prisma.user.findUnique({
+      where: { id: currentUser.id },
+      include: {
+        posts: {
+          orderBy: { createdAt: "desc" }
+        }
+      }
+    });
+    return res.status(200).json(userWithPosts);
   }
 
   if (req.method === "POST") {

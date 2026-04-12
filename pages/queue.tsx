@@ -14,16 +14,12 @@ import {
   QueueContextReducer,
   QueueContextState,
 } from "../context/QueueContext/QueueContext";
-import { createImpressionMutation } from "../graphql/mutations/message";
-import { explorePostsQuery, queuePostsQuery } from "../graphql/queries/post";
-import { userQuery } from "../graphql/queries/user";
 import { useImageUrl } from "../hooks/useImageUrl";
 import { usePreloadImage } from "../hooks/usePreloadImage";
 import { useUnreadThreads } from "../hooks/useUnreadThreads";
 import { InterestsContent, PopularInterests } from "./interests";
 import { NextSeo } from "next-seo";
 import BrandName from "../components/layout/BrandName/BrandName";
-import { userThreadsQuery } from "../graphql/queries/thread";
 // import { GQLClient } from "@/lib/GQLClient";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import nextI18NextConfig from "../next-i18next.config.js";
@@ -35,44 +31,38 @@ import ViewSwitcher from "../components/queue/ViewSwitcher/ViewSwitcher";
 import { useRouter } from "next/router";
 import Masonry from "react-responsive-masonry";
 import useInfiniteScroll from "react-infinite-scroll-hook";
-import { categoriesAndInterestsQuery } from "../graphql/queries/interest";
-
-import { GraphQLClient } from "graphql-request";
-import graphClient from "../helpers/GQLClient";
-import { updateFavoriteInterestMutation } from "../graphql/mutations/user";
-// import { cpGraphqlUrl } from "./def/urls";
+import apiClient from "../helpers/APIClient";
 
 const getPostsAndUserData = async (token, interestId = null) => {
-  graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
-  const userData = await graphClient.client.request(userQuery);
+  const userData = await apiClient.get("/user");
 
   console.info("getPostsAndUserData interestId", interestId);
 
-  const postsData = await graphClient.client.request(queuePostsQuery, {
+  const postsData = await apiClient.get("/posts", {
     interestId,
+    mode: "queue",
   });
 
-  const explorePostsData = await graphClient.client.request(explorePostsQuery, {
+  const explorePostsData = await apiClient.get("/posts", {
     interestId,
     page: 1,
   });
 
-  const userThreadData = await graphClient.client.request(userThreadsQuery);
+  const userThreadData = await apiClient.get("/threads");
 
-  const categoriesAndInterestsData = await graphClient.client.request(
-    categoriesAndInterestsQuery
-  );
+  const categoriesAndInterestsData = await apiClient.get("/interests");
 
   let threads = [];
-  if (typeof userThreadData?.getUserThreads !== "undefined") {
-    threads = userThreadData?.getUserThreads;
+  if (Array.isArray(userThreadData)) {
+    threads = userThreadData;
   }
 
   const returnData = {
-    currentUser: userData.getUser,
-    posts: postsData.getQueuePosts,
-    explorePosts: explorePostsData.getExplorePosts,
+    currentUser: userData,
+    posts: postsData,
+    explorePosts: explorePostsData,
     threads,
     categoriesAndInterestsData,
   };
@@ -89,7 +79,7 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
   const [cookies, setCookie] = useCookies(["coUserToken", "coFavInt"]);
   const token = cookies.coUserToken;
 
-  const gqlClient = graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
   console.info("favoriteInterest", favoriteInterest);
 
@@ -140,18 +130,18 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
 
   const loadMoreExploreItems = async () => {
     const newPage = explorePostsPage + 1;
-    const addtPostsData = await graphClient.client.request(explorePostsQuery, {
+    const addtPostsData = await apiClient.get("/posts", {
       interestId: selectedInterest?.id,
       page: newPage,
     });
 
     setExploreHasMore(
-      addtPostsData.getExplorePosts.length === 20 ? true : false
+      addtPostsData.length === 20 ? true : false
     );
     setExplorePostsPage(newPage);
     setExplorePostsData([
       ...explorePostsData,
-      ...addtPostsData.getExplorePosts,
+      ...addtPostsData,
     ]);
   };
 
@@ -325,14 +315,11 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
       // // const authorUsername = data?.currentUser?.generatedUsername;
       const postCreatorUsername = currentPost?.creator?.generatedUsername;
 
-      const savedImpression = await graphClient.client.request(
-        createImpressionMutation,
-        {
-          content: impression,
-          postCreatorUsername,
-          postId: currentPost?.id,
-        }
-      );
+      const savedImpression = await apiClient.post("/impressions", {
+        content: impression,
+        postCreatorUsername,
+        postId: currentPost?.id,
+      });
 
       setTimeout(async () => {
         // console.info("savedImpression", savedImpression);
@@ -477,7 +464,7 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
           <PopularInterests
             title={t("interests:ui.pickFavoriteInterest")}
             onConfirm={async (category, interest) => {
-              await graphClient.client.request(updateFavoriteInterestMutation, {
+              await apiClient.post("/interests/favorite", {
                 interestId: interest.id,
               });
 

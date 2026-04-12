@@ -26,7 +26,20 @@ export default async function handler(
               profileImage: true
             }
           },
-          interest: true
+          interest: true,
+          messages: {
+            where: { type: "impression" },
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  chosenUsername: true,
+                  profileImage: true
+                }
+              }
+            },
+            orderBy: { createdAt: "desc" }
+          }
         }
       });
 
@@ -34,7 +47,13 @@ export default async function handler(
         return res.status(404).json({ error: "Post not found" });
       }
 
-      return res.status(200).json(post);
+      // Map messages to impressions to match frontend expectation
+      const postWithImpressions = {
+        ...post,
+        impressions: post.messages
+      };
+
+      return res.status(200).json(postWithImpressions);
     } catch (error) {
       console.error("Fetch post error:", error);
       return res.status(500).json({ error: "Internal server error" });

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useCookies } from "react-cookie";
-import { toggleFavoriteMutation } from "../../../graphql/mutations/post";
-import graphClient from "../../../helpers/GQLClient";
+import apiClient from "../../../helpers/APIClient";
 import { RWebShare } from "react-web-share";
 
 import { PostInteractionProps } from "./PostInteraction.d";
@@ -18,7 +17,7 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
   const strings = new Strings();
   const [cookies] = useCookies(["coUserToken"]);
   const token = cookies.coUserToken;
-  const gqlClient = graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
   const [favorited, setFavorited] = React.useState(false);
 
@@ -31,7 +30,7 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
   const toggleFavorite = async () => {
     console.info("toggleFavorite", post.id);
 
-    await graphClient.client.request(toggleFavoriteMutation, {
+    await apiClient.post("/posts/favorite", {
       postId: post.id,
     });
 

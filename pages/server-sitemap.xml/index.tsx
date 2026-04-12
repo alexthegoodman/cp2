@@ -2,10 +2,8 @@
 
 import { getServerSideSitemap } from "next-sitemap";
 import { GetServerSideProps } from "next";
-import request from "graphql-request";
+
 import { cpGraphqlUrl } from "../../def/urls";
-import { profileURLsQuery } from "../../graphql/queries/user";
-import { postURLsQuery } from "../../graphql/queries/post";
 
 const getURLData = async () => {
   const profileURLs = await request(cpGraphqlUrl, profileURLsQuery);

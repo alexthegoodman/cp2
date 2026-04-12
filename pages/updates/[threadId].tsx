@@ -1,4 +1,4 @@
-import request from "graphql-request";
+
 import type { NextPage } from "next";
 import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
@@ -8,34 +8,25 @@ import Utilities from "@/lib";
 import MessageDictator from "../../components/updates/MessageDictator/MessageDictator";
 import MessageList from "../../components/updates/MessageList/MessageList";
 import PrimaryHeader from "../../components/layout/PrimaryHeader/PrimaryHeader";
-import { threadQuery } from "../../graphql/queries/thread";
 import { useRouter } from "next/router";
-import { userQuery } from "../../graphql/queries/user";
 import { useEffect } from "react";
-import { createRecordMutation } from "../../graphql/mutations/record";
 import { NextSeo } from "next-seo";
-import { GQLClient } from "@/lib/GQLClient";
 import DesktopNavigation from "../../components/layout/DesktopNavigation/DesktopNavigation";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config.js";
 import { useTranslation } from "next-i18next";
-import graphClient from "../../helpers/GQLClient";
+import apiClient from "../../helpers/APIClient";
 
 const getUserAndThreadData = async (token, threadId) => {
-  const gqlClient = graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
-  const userData = await graphClient.client.request(userQuery);
+  const userData = await apiClient.get("/user");
+  const threadData = await apiClient.get(`/threads/${threadId}`);
 
-  const threadData = await graphClient.client.request(threadQuery, {
-    threadId,
-  });
-
-  const returnData = {
-    currentUser: userData,
-    currentThread: threadData,
+  return {
+    currentUser: { getUser: userData },
+    currentThread: { getThreadById: threadData },
   };
-
-  return returnData;
 };
 
 const ThreadContent = () => {
@@ -43,7 +34,7 @@ const ThreadContent = () => {
   const [cookies] = useCookies(["coUserToken"]);
   const token = cookies.coUserToken;
 
-  const gqlClient = graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
   const router = useRouter();
   const { threadId } = router.query;
@@ -56,17 +47,17 @@ const ThreadContent = () => {
     }
   );
 
-  const otherUser = data?.currentThread?.getThreadById?.messages.filter(
-    (message, i) => message?.user?.email !== data?.currentUser?.getUser?.email
-  )[0].user;
+  const otherUser = data?.currentThread?.getThreadById?.users?.find(
+    (user) => user?.id !== data?.currentUser?.getUser?.id
+  );
 
   const setReadBy = async () => {
-    const readAt = await graphClient.client.request(createRecordMutation, {
-      username: data?.currentUser?.getUser?.generatedUsername,
+    if (!threadId) return;
+    await apiClient.post("/records", {
+      name: "readAt",
+      content: new Date().toISOString(),
       threadId,
     });
-
-    // console.info("readAt", readAt);
   };
 
   useEffect(() => {

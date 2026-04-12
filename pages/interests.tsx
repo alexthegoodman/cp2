@@ -1,4 +1,4 @@
-import request from "graphql-request";
+
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -8,20 +8,13 @@ import useSWR from "swr";
 import InterestGrid from "../components/interests/InterestGrid/InterestGrid";
 import InterestPreview from "../components/interests/InterestPreview/InterestPreview";
 import PrimaryHeader from "../components/layout/PrimaryHeader/PrimaryHeader";
-import { categoriesAndInterestsQuery } from "../graphql/queries/interest";
-import { GQLClient } from "@/lib/GQLClient";
 import { useTranslation } from "next-i18next";
 import FormMessage from "../components/fields/FormMessage/FormMessage";
-import { updateFavoriteInterestMutation } from "../graphql/mutations/user";
-import graphClient from "../helpers/GQLClient";
+import apiClient from "../helpers/APIClient";
 
 const getCategoriesAndInterestData = async (token) => {
-  const gqlClient = graphClient.setupClient(token);
-
-  const categoriesAndInterestsData = await graphClient.client.request(
-    categoriesAndInterestsQuery
-  );
-
+  apiClient.setupClient(token);
+  const categoriesAndInterestsData = await apiClient.get("/interests");
   return categoriesAndInterestsData;
 };
 

@@ -1,4 +1,4 @@
-import request from "graphql-request";
+
 import type { NextPage } from "next";
 import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
@@ -7,28 +7,25 @@ import { useCookies } from "react-cookie";
 import Utilities from "@/lib";
 import PrimaryHeader from "../../components/layout/PrimaryHeader/PrimaryHeader";
 import UpdateItem from "../../components/updates/UpdateItem/UpdateItem";
-import { threadsQuery, userThreadsQuery } from "../../graphql/queries/thread";
 import { useUnreadThreads } from "../../hooks/useUnreadThreads";
 import { NextSeo } from "next-seo";
 import InviteFriends from "../../components/growth/InviteFriends/InviteFriends";
-import { userQuery } from "../../graphql/queries/user";
 import DesktopNavigation from "../../components/layout/DesktopNavigation/DesktopNavigation";
 import { GQLClient } from "@/lib/GQLClient";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config.js";
 import { useTranslation } from "next-i18next";
-import graphClient from "../../helpers/GQLClient";
+import apiClient from "../../helpers/APIClient";
 
-export const getUserThreadData = async (token) => {
-  const gqlClient = graphClient.setupClient(token);
+const getUserData = async (token) => {
+  apiClient.setupClient(token);
 
-  const userData = await graphClient.client.request(userQuery);
-
-  const userThreadData = await graphClient.client.request(userThreadsQuery);
+  const userData = await apiClient.get("/user");
+  const userThreadData = await apiClient.get("/threads");
 
   return {
-    user: userData?.getUser,
-    threads: userThreadData?.getUserThreads,
+    getUser: userData,
+    getUserThreads: userThreadData,
   };
 };
 

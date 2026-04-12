@@ -1,4 +1,4 @@
-import request from "graphql-request";
+
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -14,22 +14,17 @@ import FormTextarea from "../components/fields/FormTextarea/FormTextarea";
 import FormUpload from "../components/fields/FormUpload/FormUpload";
 import PrimaryHeader from "../components/layout/PrimaryHeader/PrimaryHeader";
 import StepCounter from "../components/forms/StepCounter/StepCounter";
-import { createPostMutation } from "../graphql/mutations/post";
-import { userQuery } from "../graphql/queries/user";
 import { InterestsContent } from "./interests";
-import { GQLClient } from "@/lib/GQLClient";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import nextI18NextConfig from "../next-i18next.config.js";
 import { useTranslation } from "next-i18next";
-import graphClient from "../helpers/GQLClient";
+import apiClient from "../helpers/APIClient";
 import MixpanelBrowser from "../helpers/MixpanelBrowser";
 
 const getUserData = async (token) => {
-  const gqlClient = graphClient.setupClient(token);
-
-  const userData = await graphClient.client.request(userQuery);
-
-  return userData;
+  apiClient.setupClient(token);
+  const userData = await apiClient.get("/user");
+  return { getUser: userData };
 };
 
 const UploadContent = () => {
@@ -39,7 +34,7 @@ const UploadContent = () => {
 
   const mixpanel = new MixpanelBrowser();
 
-  const gqlClient = graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
   const { data } = useSWR("profileKey", () => getUserData(token));
 
@@ -68,36 +63,29 @@ const UploadContent = () => {
     setSubmitLoading(true);
 
     try {
-      const createdPost = await graphClient.client.request(
-        createPostMutation,
-        {
-          // creatorId: userId,
-          interestId: selectedInterest?.id,
-          contentType,
-          ...formValues,
-        },
-        {
-          commonplace_jwt_header: token,
-        }
-      );
+      const createdPost = await apiClient.post("/posts", {
+        interestId: selectedInterest?.id,
+        contentType,
+        ...formValues,
+      });
 
       setSubmitLoading(false);
 
       console.info(
         "createdPost",
         createdPost,
-        createdPost.createPost.generatedTitleSlug
+        createdPost.generatedTitleSlug
       );
 
       mixpanel.track("Post Created", { createdPost });
 
       router.push(
-        `/post/${createdPost.createPost.interest?.generatedInterestSlug}/${createdPost.createPost.generatedTitleSlug}/?backPath=/profile/`
+        `/post/${createdPost.interest?.generatedInterestSlug}/${createdPost.generatedTitleSlug}/?backPath=/profile/`
       );
     } catch (error: any) {
       console.error("error", error);
       setSubmitLoading(false);
-      const errorMessage = error?.response?.errors[0].message;
+      const errorMessage = error.message;
       setFormErrorMessage(errorMessage);
       mixpanel.track("Post Creation Error", { errorMessage, error });
     }

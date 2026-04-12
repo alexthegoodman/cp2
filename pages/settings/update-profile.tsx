@@ -1,4 +1,4 @@
-import request from "graphql-request";
+
 import type { NextPage } from "next";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
@@ -12,20 +12,18 @@ import FormInput from "../../components/fields/FormInput/FormInput";
 import FormMessage from "../../components/fields/FormMessage/FormMessage";
 import FormUpload from "../../components/fields/FormUpload/FormUpload";
 import PrimaryHeader from "../../components/layout/PrimaryHeader/PrimaryHeader";
-import { updateProfileMutation } from "../../graphql/mutations/user";
-import { userQuery } from "../../graphql/queries/user";
 import { GQLClient } from "@/lib/GQLClient";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config.js";
 import { useTranslation } from "next-i18next";
-import graphClient from "../../helpers/GQLClient";
+import apiClient from "../../helpers/APIClient";
 
 const getUserData = async (token) => {
-  const gqlClient = graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
-  const userData = await graphClient.client.request(userQuery);
+  const userData = await apiClient.get("/user");
 
-  return userData;
+  return { getUser: userData };
 };
 
 const SettingsContent = ({ data }) => {
@@ -34,7 +32,7 @@ const SettingsContent = ({ data }) => {
   const [cookies] = useCookies(["coUserToken"]);
   const token = cookies.coUserToken;
 
-  const gqlClient = graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
   // console.info("SettingsContent", token, data);
 
@@ -62,7 +60,7 @@ const SettingsContent = ({ data }) => {
   }, [data]);
 
   const onSubmit = async (formValues) => {
-    await graphClient.client.request(updateProfileMutation, {
+    await apiClient.put("/user", {
       ...formValues,
     });
     router.push("/profile/");

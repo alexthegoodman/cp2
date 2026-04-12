@@ -1,4 +1,4 @@
-import request from "graphql-request";
+
 import { DateTime } from "luxon";
 import type { NextPage } from "next";
 import { NextSeo } from "next-seo";
@@ -13,35 +13,19 @@ import FormMessage from "../../../../components/fields/FormMessage/FormMessage";
 import FormTextarea from "../../../../components/fields/FormTextarea/FormTextarea";
 import PrimaryHeader from "../../../../components/layout/PrimaryHeader/PrimaryHeader";
 import { cpGraphqlUrl } from "../../../../def/urls";
-import { updatePostMutation } from "../../../../graphql/mutations/post";
-import { postImpressionsQuery } from "../../../../graphql/queries/message";
-import { postByPostTitleQuery } from "../../../../graphql/queries/post";
-import { userByPostTitleQuery } from "../../../../graphql/queries/user";
-import { GQLClient } from "@/lib/GQLClient";
-import graphClient from "../../../../helpers/GQLClient";
+import apiClient from "../../../../helpers/APIClient";
 
 const getPostAndUserData = async (postTitle) => {
-  const postData = await request(cpGraphqlUrl, postByPostTitleQuery, {
-    postTitle,
-  });
+  const postData = await apiClient.get(`/posts/${postTitle}`);
 
-  const userData = await request(cpGraphqlUrl, userByPostTitleQuery, {
-    postTitle,
-  });
-
-  const returnData = {
-    ...postData.getPostByPostTitle,
-    creator: userData.getUserByPostTitle,
-  };
-
-  return returnData;
+  return postData;
 };
 
 const EditPostContent = ({ data }) => {
   const [cookies] = useCookies(["coUserToken"]);
   const token = cookies.coUserToken;
 
-  const gqlClient = graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
   const currentPost = data;
 
@@ -78,8 +62,7 @@ const EditPostContent = ({ data }) => {
   const onSubmit = async (formValues) => {
     console.info("onSubmit", formValues, data);
 
-    const updatedPost = await graphClient.client.request(updatePostMutation, {
-      postTitleSlug: data?.generatedTitleSlug, //protected public fields
+    const updatedPost = await apiClient.put(`/posts/${data?.generatedTitleSlug}`, {
       ...formValues,
     });
 

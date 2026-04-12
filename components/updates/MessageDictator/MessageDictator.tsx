@@ -1,10 +1,8 @@
-import request from "graphql-request";
 import { useTranslation } from "next-i18next";
 import * as React from "react";
 import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
-import { createReplyMutation } from "../../../graphql/mutations/message";
-import graphClient from "../../../helpers/GQLClient";
+import apiClient from "../../../helpers/APIClient";
 import FormTextarea from "../../fields/FormTextarea/FormTextarea";
 
 import { MessageDictatorProps } from "./MessageDictator.d";
@@ -20,7 +18,7 @@ const MessageDictator: React.FC<MessageDictatorProps> = ({
   const [cookies] = useCookies(["coUserToken"]);
   const token = cookies.coUserToken;
 
-  const gqlClient = graphClient.setupClient(token);
+  apiClient.setupClient(token);
 
   // const { mutate } = useSWRConfig();
 
@@ -34,7 +32,7 @@ const MessageDictator: React.FC<MessageDictatorProps> = ({
   const onSubmit = async (data) => {
     console.log("MessageDictator onSubmit", data, threadId);
 
-    const message = await graphClient.client.request(createReplyMutation, {
+    const message = await apiClient.post("/messages", {
       content: data?.message,
       threadId: threadId,
     });
