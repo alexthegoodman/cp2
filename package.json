@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
     "postbuild": "next-sitemap",
+    "build": "prisma migrate deploy && next build",
     "start": "next start",
+    "postinstall": "prisma generate",
     "db:clean": "tsx prisma/seed/clean",
     "db:seed": "tsx prisma/seed"
   },
