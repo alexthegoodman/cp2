@@ -1,0 +1,23 @@
+.interestPreview {
+  height: 200px;
+  background: $paleBlue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding-top: 25px;
+
+  .interestPreviewInner {
+    .previewLabel {
+      padding: 14px 14px;
+      background: rgba(white, 0.5);
+      border-radius: 3px;
+
+      span {
+        font-size: 24px;
+        font-weight: 600;
+        color: $purple;
+      }
+    }
+  }
+}

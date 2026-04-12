@@ -1,0 +1,97 @@
+/** Variables **/
+$inputGrey: #ececec;
+
+/** Component Imports **/
+@import "../components/fields/FormInput/FormInput";
+@import "../components/fields/SearchInput/SearchInput";
+@import "../components/fields/FormTextarea/FormTextarea";
+@import "../components/fields/FormUpload/FormUpload";
+@import "../components/fields/FormMessage/FormMessage";
+@import "../components/forms/LandingForm/LandingForm";
+
+/** Page Styles **/
+.formWrapper {
+  width: 90%;
+  margin: 50px auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button {
+  outline: none;
+  border: none;
+  box-shadow: none;
+  background: none;
+  max-width: 100%;
+  font-size: 24px;
+  // background: $lightBlue;
+  background: $brandGradient;
+  text-decoration: none;
+  color: white;
+  width: 275px;
+  font-weight: 600;
+  display: block;
+  padding: 18px 0;
+  text-align: center;
+  transition: all 0.2s;
+
+  &:focus {
+    outline: 1px $red solid;
+  }
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+  &:disabled {
+    background: grey;
+  }
+}
+
+.secondaryButton {
+  @extend .button;
+  font-size: 20px;
+  // background: $darkBlue;
+  background: $purple;
+  color: white;
+  padding: 12px 0;
+  font-weight: 400;
+}
+
+.circleButton {
+  outline: none;
+  background: none;
+  border: none;
+  width: 100px;
+  height: 100px;
+  background: $lightBlue;
+  border-radius: 50%;
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+
+  .feather-icon {
+    font-size: 36px;
+  }
+
+  .typcn {
+    font-size: 54px;
+    position: relative;
+    top: -2px;
+  }
+
+  &:active {
+    background: $midBlue;
+  }
+  &:focus {
+    border: 2px $midBlue solid;
+  }
+  &:disabled {
+    background: $cancelGrey;
+  }
+}

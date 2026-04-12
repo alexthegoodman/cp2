@@ -1,0 +1,25 @@
+.messageList {
+  position: relative;
+  // margin-top: 100px;
+  height: calc(100vh - 450px);
+  width: 80%;
+  margin: 0 auto 15px auto;
+
+  .messageListInner {
+    display: flex;
+    flex-flow: column-reverse;
+    align-items: center;
+    // min-height: calc(100vh - 750px);
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  @media screen and (min-width: $desktopWidth) {
+    width: 100%;
+
+    .messageListInner {
+      width: 80%;
+      margin: 0 auto;
+    }
+  }
+}

@@ -1,0 +1,41 @@
+.messageDictator {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .messageDictatorInner {
+    width: 90%;
+
+    .dictatorContentWrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      width: 100%;
+
+      .dictatorContent {
+        width: 100%;
+
+        background: $midBlue;
+        margin: 25px 0;
+
+        border-radius: 10px;
+
+        .formTextarea {
+          textarea {
+            font-size: 16px;
+            line-height: 24px;
+            padding: 25px;
+            height: 155px;
+            margin: 0;
+            align-items: flex-start;
+          }
+        }
+      }
+    }
+    .dictatorControls {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+}

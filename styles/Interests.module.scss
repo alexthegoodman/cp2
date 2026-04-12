@@ -1,0 +1,107 @@
+/** Variables **/
+
+/** Component Imports **/
+@import "../components/interests/InterestGrid/InterestGrid";
+@import "../components/interests/InterestPreview/InterestPreview";
+
+/** Page Styles **/
+.interests,
+.popularInterests {
+  width: 100%;
+  max-width: $desktopWidth;
+  margin: 0 auto;
+  height: 100vh;
+  overflow-y: scroll;
+
+  .interestsInner {
+    @media screen and (min-width: $desktopWidth) {
+      header.primaryHeader,
+      header.primaryHeader.whiteHeader {
+        right: 0px;
+      }
+    }
+  }
+}
+
+.popularInterests {
+  .popularInterestsInner {
+    .interestSelector {
+      .interestSelectorInner {
+        padding: 0 25px;
+
+        .actionLink {
+          display: block;
+          margin-bottom: 25px;
+        }
+        .title {
+          font-size: 24px;
+          font-weight: 600;
+          display: block;
+          margin-top: 20px;
+          margin-bottom: 40px;
+        }
+        .subTitle {
+          font-size: 20px;
+          display: block;
+          margin-bottom: 20px;
+        }
+        .listItem {
+          padding: 7px 14px;
+          border-radius: 50px;
+          background: $purple;
+          margin-right: 10px;
+          margin-bottom: 20px;
+          text-decoration: none;
+
+          span {
+            font-size: 13px;
+            color: white;
+          }
+        }
+        .popularList {
+          padding-top: 20px;
+        }
+        .categorySection {
+          margin-bottom: 25px;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+      }
+    }
+  }
+}
+
+.interestPicker {
+  padding: 30px 25px;
+
+  .interestPickerInner {
+    .pickerSearch {
+    }
+  }
+}
+
+.pickerSelector {
+  .pickerSelectorInner {
+    .selectorLevel {
+      margin-top: 20px;
+
+      .selectorLabel {
+        font-size: 20px;
+        color: $darkBlue;
+        font-weight: 600;
+      }
+      .selectorGridWrapper {
+      }
+    }
+  }
+}
+
+.pickerControls {
+  .pickerControlsInner {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 20px 0;
+  }
+}

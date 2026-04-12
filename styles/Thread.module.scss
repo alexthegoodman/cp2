@@ -1,0 +1,24 @@
+/** Variables **/
+
+/** Component Imports **/
+@import "../components/updates/MessageList/MessageList";
+@import "../components/updates/MessageItem/MessageItem";
+@import "../components/updates/MessageDictator/MessageDictator";
+
+/** Page Styles **/
+.thread {
+  width: 100%;
+}
+
+.emptyMessage {
+  width: 80%;
+  margin: 50px auto;
+  text-align: center;
+
+  span {
+    font-size: 16px;
+    line-height: 28px;
+    color: darkgray;
+    font-weight: 300;
+  }
+}

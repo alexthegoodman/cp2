@@ -1,0 +1,20 @@
+.textViewer {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 95px 85px 35px 25px;
+
+  &.mini {
+    min-height: auto;
+    padding: 50px 10px;
+  }
+
+  .textViewerInner {
+    p {
+      white-space: pre-wrap;
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+}

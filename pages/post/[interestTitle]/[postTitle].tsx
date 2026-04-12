@@ -1,0 +1,165 @@
+import request from "graphql-request";
+import { DateTime } from "luxon";
+import type { NextPage } from "next";
+import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
+import useSWR, { SWRConfig } from "swr";
+import ContentInformation from "../../../components/post/ContentInformation/ContentInformation";
+import ContentViewer from "../../../components/post/ContentViewer/ContentViewer";
+import DesktopNavigation from "../../../components/layout/DesktopNavigation/DesktopNavigation";
+import PostImpressions from "../../../components/post/PostImpressions/PostImpressions";
+import PrimaryHeader from "../../../components/layout/PrimaryHeader/PrimaryHeader";
+import { cpDomain, cpGraphqlUrl } from "../../../def/urls";
+import { postImpressionsQuery } from "../../../graphql/queries/message";
+import { postByPostTitleQuery } from "../../../graphql/queries/post";
+import { userByPostTitleQuery } from "../../../graphql/queries/user";
+import { useImageUrl } from "../../../hooks/useImageUrl";
+import { useRouterBack } from "../../../hooks/useRouterBack";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import nextI18nextConfig from "../../../next-i18next.config";
+import Utilities from "@/lib";
+import graphClient from "../../../helpers/GQLClient";
+import { useCookies } from "react-cookie";
+
+const getPostAndUserData = async (token, postTitle) => {
+  console.info("getPostAndUserData", token);
+  graphClient.setupClient(token);
+
+  const postData = await graphClient.client.request(postByPostTitleQuery, {
+    postTitle,
+  });
+
+  // const impressionData = await request(cpGraphqlUrl, postImpressionsQuery, {
+  //   postTitle,
+  // });
+
+  const userData = await graphClient.client.request(userByPostTitleQuery, {
+    postTitle,
+  });
+
+  const returnData = {
+    ...postData.getPostByPostTitle,
+    creator: userData.getUserByPostTitle,
+    // impressions: impressionData.getPostImpressions,
+  };
+
+  return returnData;
+};
+
+const PostContent = ({ data }) => {
+  const currentPost = data;
+
+  // console.info("currentPost", currentPost);
+
+  const router = useRouter();
+  const { goBack } = useRouterBack(router);
+
+  const displayDate = DateTime.fromISO(currentPost?.createdAt).toFormat("D");
+  const contentSEOStatement = `${currentPost?.title} Post in ${currentPost?.interest?.name} Interest - Created by ${currentPost?.creator?.chosenUsername} - ${displayDate}`;
+  const canonicalUrl =
+    "https://" +
+    cpDomain +
+    "/post/" +
+    currentPost?.interest?.generatedInterestSlug +
+    "/" +
+    currentPost?.generatedTitleSlug;
+  const { imageUrl: mainImageUrl } = useImageUrl(currentPost?.content);
+
+  // console.info("currentUrl", canonicalUrl);
+
+  return (
+    <section className="post">
+      <div className="postInner">
+        <NextSeo
+          title={`${currentPost?.title} | Posts | CommonPlace`}
+          description={`${currentPost?.description}`}
+          canonical={canonicalUrl}
+          openGraph={{
+            url: canonicalUrl,
+            title: `Find ${currentPost?.title} and more like it on CommonPlace`,
+            description: "CommonPlace has content from people like yourself",
+            images: [{ url: mainImageUrl }],
+            site_name: "CommonPlace",
+          }}
+        />
+        <PrimaryHeader
+          inline={true}
+          leftIcon={
+            <>
+              <DesktopNavigation />
+              <a className="mobileOnly" onClick={goBack}>
+                <i className="typcn typcn-arrow-left"></i>
+              </a>
+            </>
+          }
+          title={`Creation`}
+          rightIcon={<></>}
+        />
+        <div className="scrollContainer" style={{ paddingBottom: 75 }}>
+          <ContentViewer
+            alt={contentSEOStatement}
+            type={currentPost?.contentType}
+            preview={currentPost?.contentPreview}
+            content={currentPost?.content}
+            mini={true}
+          />
+          <ContentInformation post={currentPost} />
+          <PostImpressions impressions={currentPost?.impressions} />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const PostDataWrapper = () => {
+  const router = useRouter();
+  const { interestTitle, postTitle } = router.query;
+
+  const [cookies] = useCookies(["coUserToken"]);
+  const token = cookies.coUserToken;
+
+  const { data } = useSWR("postKey" + postTitle, () =>
+    getPostAndUserData(token, postTitle)
+  );
+
+  // console.info("PostDataWrapper", data);
+
+  return <PostContent data={data} />;
+};
+
+const Post: NextPage<{ fallback: any }> = ({ fallback }) => {
+  return (
+    <SWRConfig
+      value={{ fallback, revalidateOnMount: true, refreshWhenHidden: true }}
+    >
+      <PostDataWrapper />
+    </SWRConfig>
+  );
+};
+
+export async function getServerSideProps(context) {
+  const utilities = new Utilities();
+  const cookieData = utilities.helpers.parseCookie(context.req.headers.cookie);
+  const token = cookieData.coUserToken;
+
+  const { interestTitle, postTitle } = context.query;
+  const postAndUserData = await getPostAndUserData(token, postTitle);
+
+  // console.info("Post postAndUserData", query, postAndUserData);
+
+  const locale =
+    typeof cookieData.coUserLng !== "undefined"
+      ? cookieData.coUserLng
+      : context.locale;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"], nextI18nextConfig)),
+      fallback: {
+        ["postKey" + postTitle]: postAndUserData,
+      },
+    },
+  };
+}
+
+export default Post;

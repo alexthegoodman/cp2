@@ -1,0 +1,70 @@
+/** Variables **/
+
+/** Component Imports **/
+@import "../components/post/ContentInformation/ContentInformation";
+@import "../components/queue/ImpressionWheel/ImpressionWheel";
+@import "../components/queue/ImpressionGrid/ImpressionGrid";
+@import "../components/layout/PrimaryHeader/PrimaryHeader";
+@import "../components/layout/PrimaryNavigation/PrimaryNavigation";
+@import "../components/post/PostImpressions/PostImpressions";
+@import "../components/queue/LanguagePicker/LanguagePicker";
+
+@import "../components/post/ContentViewer/ContentViewer";
+@import "../components/post/VideoViewer/VideoViewer";
+@import "../components/post/AudioViewer/AudioViewer";
+@import "../components/post/TextViewer/TextViewer";
+@import "../components/post/ImageViewer/ImageViewer";
+@import "../components/post/ImpressionTicker/ImpressionTicker";
+@import "../components/queue/PickerButton/PickerButton";
+@import "../components/layout/BrandName/BrandName";
+@import "../components/queue/CreditCounter/CreditCounter";
+@import "../components/queue/ViewSwitcher/ViewSwitcher";
+@import "../components/post/PostInteraction/PostInteraction";
+
+/*** Page Styles ***/
+.queueScrollContainer {
+  position: relative;
+  z-index: 5;
+
+  height: calc(100vh - 240px);
+
+  .displayPost {
+    // position: absolute;
+    width: 100%;
+
+    &.preloadPost {
+      opacity: 0;
+      display: none;
+    }
+    &.currentPost {
+    }
+  }
+
+  @media screen and (min-width: $desktopWidth) {
+    height: calc(100vh - 280px);
+  }
+}
+
+.animationContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: scroll;
+
+  &.queueAnimationContainer {
+    overflow: hidden;
+  }
+}
+
+.queueEmptyMessage {
+  padding-top: 200px;
+}
+
+.fullModal {
+  position: absolute;
+  background: white;
+  width: 100vw;
+  height: 100vh;
+}

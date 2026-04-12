@@ -1,0 +1,10 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://commonplace.social
+
+# Sitemaps
+Sitemap: https://commonplace.social/sitemap.xml
+Sitemap: https://commonplace.social/server-sitemap.xml

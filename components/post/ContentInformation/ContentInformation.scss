@@ -1,0 +1,139 @@
+.contentInformation {
+  // background: rgba($frenchRaspberry, 0.4);
+
+  .contentInformationInner {
+    // padding: 25px 25px;
+
+    // .separator {
+    //   display: block;
+    //   width: 30px;
+    //   height: 2px;
+    //   background: #e5e5e5;
+    //   // margin: 15px 0;
+    // }
+
+    .tickerSpacer {
+      height: 20px;
+      display: block;
+    }
+
+    .contentHeader {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 25px 25px 5px 25px;
+    }
+    .contentTitle {
+      font-size: 24px;
+      line-height: 28px;
+      // margin-bottom: 10px;
+      font-weight: 600;
+      // margin-bottom: 25px;
+    }
+    .separator {
+      border-bottom: 1px #e5e5e5 solid;
+    }
+    .contentMetaData {
+      padding: 15px 25px 35px 25px;
+      // border-bottom: 1px #e5e5e5 solid;
+    }
+    p {
+      display: block;
+      font-size: 14px;
+      line-height: 22px;
+      color: #757575;
+      font-weight: 300;
+      // margin: 15px 0;
+      font-family: system-ui;
+      // margin-top: 25px;
+      margin-bottom: 5px;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+    .contentDescription {
+      margin-bottom: 15px;
+    }
+    .contentAuthor {
+      // margin: 15px 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      padding: 15px 25px;
+      // border-bottom: 1px #e5e5e5 solid;
+
+      &:hover {
+        background: rgb(250, 250, 250);
+      }
+
+      &:focus {
+        outline: 1px grey solid;
+      }
+
+      // &:before {
+      //   content: " ";
+      //   display: block;
+      //   height: 30px;
+      //   width: 3px;
+      //   background: #e5e5e5;
+      //   margin-right: 15px;
+      // }
+
+      .contentAuthorInner {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+
+        .authorProfileImage {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          background: $paleBlue;
+          overflow: hidden;
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          img {
+            max-height: 100%;
+          }
+          .defaultAvatar {
+            .typcn {
+              font-size: 24px;
+              color: white;
+            }
+          }
+        }
+        .authorInformationWrapper {
+          width: calc(100% - 45px);
+        }
+        .authorInformation {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          width: 100%;
+          padding-left: 10px;
+
+          .authorAttribution {
+            font-size: 14px;
+            font-weight: 300;
+
+            overflow: hidden;
+            white-space: nowrap;
+            width: 50%;
+            text-overflow: ellipsis;
+          }
+          .authorCreationCount {
+            font-size: 13px;
+            font-weight: 300;
+            color: grey;
+          }
+        }
+      }
+    }
+  }
+}

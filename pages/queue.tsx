@@ -1,0 +1,694 @@
+import type { NextPage } from "next";
+import { useEffect, useReducer, useState } from "react";
+import { useCookies } from "react-cookie";
+import useSWR, { SWRConfig, useSWRConfig } from "swr";
+import { motion, useAnimation } from "framer-motion";
+import Utilities from "@/lib";
+import ContentInformation from "../components/post/ContentInformation/ContentInformation";
+import ContentViewer from "../components/post/ContentViewer/ContentViewer";
+import ImpressionGrid from "../components/queue/ImpressionGrid/ImpressionGrid";
+import PrimaryHeader from "../components/layout/PrimaryHeader/PrimaryHeader";
+import PrimaryNavigation from "../components/layout/PrimaryNavigation/PrimaryNavigation";
+import {
+  QueueContext,
+  QueueContextReducer,
+  QueueContextState,
+} from "../context/QueueContext/QueueContext";
+import { createImpressionMutation } from "../graphql/mutations/message";
+import { explorePostsQuery, queuePostsQuery } from "../graphql/queries/post";
+import { userQuery } from "../graphql/queries/user";
+import { useImageUrl } from "../hooks/useImageUrl";
+import { usePreloadImage } from "../hooks/usePreloadImage";
+import { useUnreadThreads } from "../hooks/useUnreadThreads";
+import { InterestsContent, PopularInterests } from "./interests";
+import { NextSeo } from "next-seo";
+import BrandName from "../components/layout/BrandName/BrandName";
+import { userThreadsQuery } from "../graphql/queries/thread";
+// import { GQLClient } from "@/lib/GQLClient";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import nextI18NextConfig from "../next-i18next.config.js";
+import { useTranslation } from "next-i18next";
+import LanguagePicker from "../components/queue/LanguagePicker/LanguagePicker";
+import ImpressionTicker from "../components/post/ImpressionTicker/ImpressionTicker";
+import PickerButton from "../components/queue/PickerButton/PickerButton";
+import ViewSwitcher from "../components/queue/ViewSwitcher/ViewSwitcher";
+import { useRouter } from "next/router";
+import Masonry from "react-responsive-masonry";
+import useInfiniteScroll from "react-infinite-scroll-hook";
+import { categoriesAndInterestsQuery } from "../graphql/queries/interest";
+
+import { GraphQLClient } from "graphql-request";
+import graphClient from "../helpers/GQLClient";
+import { updateFavoriteInterestMutation } from "../graphql/mutations/user";
+// import { cpGraphqlUrl } from "./def/urls";
+
+const getPostsAndUserData = async (token, interestId = null) => {
+  graphClient.setupClient(token);
+
+  const userData = await graphClient.client.request(userQuery);
+
+  console.info("getPostsAndUserData interestId", interestId);
+
+  const postsData = await graphClient.client.request(queuePostsQuery, {
+    interestId,
+  });
+
+  const explorePostsData = await graphClient.client.request(explorePostsQuery, {
+    interestId,
+    page: 1,
+  });
+
+  const userThreadData = await graphClient.client.request(userThreadsQuery);
+
+  const categoriesAndInterestsData = await graphClient.client.request(
+    categoriesAndInterestsQuery
+  );
+
+  let threads = [];
+  if (typeof userThreadData?.getUserThreads !== "undefined") {
+    threads = userThreadData?.getUserThreads;
+  }
+
+  const returnData = {
+    currentUser: userData.getUser,
+    posts: postsData.getQueuePosts,
+    explorePosts: explorePostsData.getExplorePosts,
+    threads,
+    categoriesAndInterestsData,
+  };
+
+  // console.info("returnData", returnData);
+
+  return returnData;
+};
+
+const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
+  const { t } = useTranslation();
+  const router = useRouter();
+  const { cache } = useSWRConfig();
+  const [cookies, setCookie] = useCookies(["coUserToken", "coFavInt"]);
+  const token = cookies.coUserToken;
+
+  const gqlClient = graphClient.setupClient(token);
+
+  console.info("favoriteInterest", favoriteInterest);
+
+  const [selectedInterest, setSelectedInterest] = useState<any>(
+    favoriteInterest ? favoriteInterest : null
+  );
+
+  const { data, mutate } = useSWR(
+    "queueKey",
+    () => getPostsAndUserData(token, selectedInterest?.id),
+    {
+      revalidateIfStale: true,
+      revalidateOnFocus: true,
+      revalidateOnMount: true,
+      // refreshInterval: 10000,
+    }
+  );
+
+  // console.info("data", data);
+
+  useEffect(() => {
+    // console.info("check queue", cache.get("queueKey"));
+    cache.clear();
+    mutate(() => getPostsAndUserData(token, selectedInterest?.id));
+  }, []);
+
+  const firstId = data?.posts[0]?.id;
+
+  // const [queueIndex, setQueueIndex] = useState(0);
+  const [currentView, setCurrentView] = useState<string | null>(
+    router.query.view
+  );
+  const [exploreHasMore, setExploreHasMore] = useState(true);
+  const [explorePostsPage, setExplorePostsPage] = useState(1);
+  const [explorePostsData, setExplorePostsData] = useState<any[]>([]);
+  const [queuePostId, setQueuePostId] = useState(firstId); // defaults to first post
+  const [queueFinished, setQueueFinished] = useState(firstId ? false : true);
+  const [currentImpression, setCurrentImpression] = useState("");
+  const [showInterestsModal, setShowInterestsModal] = useState(false);
+  const [showLanguageModal, setShowLanguageModal] = useState(
+    !coUserLng ? true : false
+  );
+  const [showFavoriteInterestModal, setShowFavoriteInterestModal] = useState(
+    !coFavInt ? true : false
+  );
+  const [creditUi, setCreditUi] = useState(data?.currentUser?.credit);
+  const [impressionsEnabled, setImpressionsEnabled] = useState(true);
+
+  const loadMoreExploreItems = async () => {
+    const newPage = explorePostsPage + 1;
+    const addtPostsData = await graphClient.client.request(explorePostsQuery, {
+      interestId: selectedInterest?.id,
+      page: newPage,
+    });
+
+    setExploreHasMore(
+      addtPostsData.getExplorePosts.length === 20 ? true : false
+    );
+    setExplorePostsPage(newPage);
+    setExplorePostsData([
+      ...explorePostsData,
+      ...addtPostsData.getExplorePosts,
+    ]);
+  };
+
+  const [sentryRef, { rootRef }] = useInfiniteScroll({
+    loading: false,
+    hasNextPage: exploreHasMore,
+    onLoadMore: loadMoreExploreItems,
+    // disabled: !!error,
+    rootMargin: "0px 0px 100px 0px",
+  });
+
+  // useEffect(() => {
+  //   // set initial explorePosts data
+  //   if (explorePostsData === null) {
+  //     setExplorePostsData(data?.explorePosts);
+  //   }
+  // }, [data?.explorePosts]);
+
+  useEffect(() => {
+    // set new interest filter
+    setExplorePostsData(data?.explorePosts);
+  }, [data]);
+
+  const postAnimation = useAnimation();
+  const betweenPostAnimation = useAnimation();
+  const exploreAnimation = useAnimation();
+  const queueAnimation = useAnimation();
+
+  const showInitialView = async () => {
+    if (currentView === "explore") {
+      await exploreAnimation.start((i) => ({
+        opacity: 1,
+        y: 0,
+      }));
+
+      await queueAnimation.start((i) => ({
+        opacity: 0,
+        y: -15,
+      }));
+    } else {
+      await exploreAnimation.start((i) => ({
+        opacity: 0,
+        y: -15,
+      }));
+
+      await queueAnimation.start((i) => ({
+        opacity: 1,
+        y: 0,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      if (url === "/queue?view=explore") {
+        setCurrentView("explore");
+      } else {
+        setCurrentView("queue");
+      }
+    };
+
+    router.events.on("routeChangeStart", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    // TODO: wrap up animations into hookss
+    betweenPostAnimation.set((i) => ({
+      opacity: 0,
+      y: -5,
+      // transition: { delay: i * 1.5 - 1 },
+    }));
+    postAnimation.set((i) => ({
+      opacity: 0,
+      y: 5,
+      // transition: { delay: i * 1.5 - 1 },
+    }));
+
+    postAnimation.start((i) => ({
+      opacity: 1,
+      y: 0,
+      // transition: { delay: i * 1.5 - 1 },
+    }));
+
+    showInitialView();
+  }, []);
+
+  // useEffect(() => {
+
+  // }, [currentView]);
+
+  useEffect(() => {
+    // NOTE: runs when returning to queue from other page
+    setQueuePostId(firstId);
+    setQueueFinished(firstId ? false : true);
+  }, [firstId]);
+
+  // get currentPost via id
+  const currentPost = data?.posts?.filter(
+    (post, i) => post.id === queuePostId
+  )[0];
+
+  const currentPostIndex = data?.posts.findIndex(
+    (post, x) => post.id === currentPost?.id
+  );
+
+  // console.info("currentPost", currentPostIndex, queuePostId, currentPost);
+
+  // useEffect(() => {
+  //   if (typeof currentPost?.id === "undefined") {
+  //     // reached end of queue
+  //     setQueueFinished(true);
+  //   } else {
+  //     setQueueFinished(false);
+  //   }
+  // }, [currentPostIndex]);
+
+  // TODO: preload next media
+
+  const closeQueueItemAnimation = async () => {
+    await postAnimation.start((i) => ({
+      opacity: 0,
+      y: 5,
+      transition: { duration: 0.5 },
+    }));
+
+    await betweenPostAnimation.start((i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: 0.5, duration: 0.5 }, // TODO: FLASHES at end
+    }));
+  };
+
+  const openQueueItemAnimation = async () => {
+    await betweenPostAnimation.start((i) => ({
+      opacity: 0,
+      y: -5,
+      transition: { duration: 0.5 },
+    }));
+    await postAnimation.start((i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    }));
+  };
+
+  const impressionClickHandler = async (impression) => {
+    if (queueFinished) {
+      return;
+    }
+    if (!impressionsEnabled) {
+      alert(t("common:messages.pleaseView5Seconds"));
+      return;
+    }
+
+    setImpressionsEnabled(false);
+
+    setCreditUi(creditUi + 1);
+    setCurrentImpression(impression);
+
+    await closeQueueItemAnimation();
+
+    // setQueueIndex(queueIndex + 1);
+    setTimeout(async () => {
+      // setQueuePostId(nextPostId);
+      mutate(() => getPostsAndUserData(token, selectedInterest?.id)); // refresh swrr
+      // // TODO: send impression message
+      // // const authorUsername = data?.currentUser?.generatedUsername;
+      const postCreatorUsername = currentPost?.creator?.generatedUsername;
+
+      const savedImpression = await graphClient.client.request(
+        createImpressionMutation,
+        {
+          content: impression,
+          postCreatorUsername,
+          postId: currentPost?.id,
+        }
+      );
+
+      setTimeout(async () => {
+        // console.info("savedImpression", savedImpression);
+
+        await openQueueItemAnimation();
+        setCurrentImpression("");
+
+        // start impression delay timer
+        setTimeout(() => {
+          setImpressionsEnabled(true);
+        }, 4000);
+      }, 1000);
+    }, 500);
+  };
+
+  const { unreadThreads, unreadThreadCount } = useUnreadThreads(
+    data?.threads,
+    data?.currentUser?.generatedUsername
+  );
+
+  // console.info("unreadThreads", data?.threads, unreadThreads);
+
+  const onSelectInterestClick = () => {
+    setShowInterestsModal(true);
+  };
+
+  const onCloseInterests = () => {
+    setShowInterestsModal(false);
+  };
+
+  const onConfirmInterest = async (category, interest) => {
+    // console.info("confirm interest", category, interest);
+
+    // await postAnimation.set((i) => ({
+    //   opacity: 0,
+    //   y: 0,
+    //   // transition: { delay: i * 1.5 - 1 },
+    // }));
+
+    // await postAnimation.start((i) => ({
+    //   opacity: 0,
+    //   y: 5,
+    //   transition: { duration: 4.5, delay: 4 },
+    // }));
+
+    setShowInterestsModal(false);
+    setSelectedInterest(interest);
+
+    await mutate(() => getPostsAndUserData(token, interest?.id)); // refresh swrr
+
+    await postAnimation.start((i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    }));
+
+    await queueAnimation.start((i) => ({
+      opacity: 1,
+      y: 0,
+    }));
+
+    // TODO: set selectedInterest as cookie?
+    // need to refresh data with new interest
+  };
+
+  const switchView = (selection) => {
+    if (selection) {
+      router.push(router.pathname, { query: { view: "queue" } });
+
+      // queue
+      exploreAnimation.start((i) => ({
+        opacity: 0,
+        y: -15,
+      }));
+
+      queueAnimation.start((i) => ({
+        opacity: 1,
+        y: 0,
+      }));
+    } else {
+      router.push(router.pathname, { query: { view: "explore" } });
+
+      // explore
+      exploreAnimation.start((i) => ({
+        opacity: 1,
+        y: 0,
+      }));
+
+      queueAnimation.start((i) => ({
+        opacity: 0,
+        y: -15,
+      }));
+    }
+  };
+
+  // console.info("see object", t("common:empty", { returnObjects: true }));
+
+  return (
+    <>
+      {showInterestsModal ? (
+        <section
+          className="fullModal"
+          style={{
+            zIndex: 100,
+          }}
+        >
+          {/* <NextSeo title={`Select Interest | CommonPlace`} /> */}
+          {/* <InterestsContent
+            onBack={onCloseInterests}
+            onConfirm={onConfirmInterest}
+          /> */}
+          <PopularInterests
+            title="Pick Interest"
+            onBack={onCloseInterests}
+            onConfirm={onConfirmInterest}
+          />
+        </section>
+      ) : (
+        <></>
+      )}
+      {showLanguageModal ? (
+        <section
+          className="fullModal"
+          style={{
+            zIndex: 90,
+          }}
+        >
+          {/* <NextSeo title={`Choose Language | CommonPlace`} /> */}
+          <LanguagePicker />
+        </section>
+      ) : (
+        <></>
+      )}
+      {showFavoriteInterestModal ? (
+        <section
+          className="fullModal"
+          style={{
+            zIndex: 80,
+          }}
+        >
+          {/* <NextSeo title={`Choose Favorite Interest | CommonPlace`} /> */}
+          <PopularInterests
+            title={t("interests:ui.pickFavoriteInterest")}
+            onConfirm={async (category, interest) => {
+              await graphClient.client.request(updateFavoriteInterestMutation, {
+                interestId: interest.id,
+              });
+
+              setCookie("coFavInt", interest.id);
+
+              location.reload();
+            }}
+          />
+        </section>
+      ) : (
+        <></>
+      )}
+      {
+        // !showLanguageModal &&
+        // !showInterestsModal &&
+        // !showFavoriteInterestModal ?
+        //(
+        <section className="queue">
+          <div className="queueInner">
+            <NextSeo title={`Queue | CommonPlace`} />
+            <PrimaryHeader
+              leftIcon={
+                <div className="leftHeaderContainer">
+                  <BrandName />
+                  <ViewSwitcher
+                    initialView={router.query.view}
+                    onClick={switchView}
+                    className="mobileOnly"
+                  />
+                  <PrimaryNavigation
+                    className="desktopOnly"
+                    threadCount={unreadThreadCount}
+                  />
+                </div>
+              }
+              titleComponent={
+                <PickerButton
+                  onSelectInterestClick={onSelectInterestClick}
+                  selectedInterest={selectedInterest}
+                />
+              }
+              rightIcon={
+                <PrimaryNavigation
+                  className="mobileOnly"
+                  threadCount={unreadThreadCount}
+                />
+              }
+            />
+            <motion.div
+              className="animationContainer queueAnimationContainer"
+              animate={queueAnimation}
+              initial={{ opacity: 0 }}
+            >
+              <main className="scrollContainer queueScrollContainer">
+                {!queueFinished ? (
+                  <div className="displayPost currentPost">
+                    <motion.div
+                      custom={0}
+                      animate={postAnimation}
+                      initial={{ opacity: 0, y: -15 }}
+                    >
+                      <ContentViewer
+                        type={currentPost?.contentType}
+                        preview={currentPost?.contentPreview}
+                        content={currentPost?.content}
+                      />
+                    </motion.div>
+                    <motion.div
+                      custom={1}
+                      animate={postAnimation}
+                      initial={{ opacity: 0, y: -15 }}
+                    >
+                      <ContentInformation queue={true} post={currentPost} />
+                    </motion.div>
+                  </div>
+                ) : (
+                  <div className="emptyMessage queueEmptyMessage">
+                    <span>{t("common:empty.queue")}</span>
+                  </div>
+                )}
+              </main>
+
+              <ImpressionGrid
+                creditCount={creditUi}
+                onClick={impressionClickHandler}
+              />
+            </motion.div>
+            <motion.div
+              animate={exploreAnimation}
+              className="animationContainer"
+              initial={{ opacity: 0 }}
+              ref={rootRef}
+            >
+              <Masonry columnsCount={3} gutter="2px">
+                {explorePostsData?.map((post, i) => (
+                  <ContentViewer
+                    alt={""}
+                    type={post.contentType}
+                    preview={post.contentPreview}
+                    content={post.content}
+                    mini={true}
+                  />
+                ))}
+              </Masonry>
+              <div className="sentry" ref={sentryRef}></div>
+            </motion.div>
+            {/* <ImpressionWheel /> */}
+          </div>
+          {currentView !== "explore" && currentImpression !== "" ? (
+            <motion.div
+              custom={1}
+              initial={{ opacity: 0, y: -5 }}
+              animate={betweenPostAnimation}
+            >
+              <div className="fullscreenMessage">
+                <span>{currentImpression}</span>
+              </div>
+            </motion.div>
+          ) : (
+            <></>
+          )}
+        </section>
+        // ) : (
+        //   <></>
+        // )
+      }
+    </>
+  );
+};
+
+const Queue: NextPage<{
+  fallback: any;
+  coUserLng: string;
+  coFavInt: string;
+}> = ({ fallback, coUserLng, coFavInt, favoriteInterest }) => {
+  const [state, dispatch] = useReducer(QueueContextReducer, QueueContextState);
+
+  return (
+    <QueueContext.Provider value={{ state, dispatch }}>
+      <SWRConfig
+        value={{ fallback, revalidateOnMount: true, refreshWhenHidden: true }}
+      >
+        <QueueContent
+          coUserLng={coUserLng}
+          coFavInt={coFavInt}
+          favoriteInterest={favoriteInterest}
+        />
+      </SWRConfig>
+    </QueueContext.Provider>
+  );
+};
+
+export default Queue;
+
+export async function getServerSideProps(context) {
+  const utilities = new Utilities();
+  const cookieData = utilities.helpers.parseCookie(context.req.headers.cookie);
+  const token = cookieData.coUserToken;
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/sign-in",
+        permanent: false,
+      },
+    };
+  }
+
+  const favoriteInterestId =
+    typeof cookieData.coFavInt !== "undefined" ? cookieData.coFavInt : null;
+
+  // TODO: mismatch if selecting new interest in modal
+  // assure that modal sets Current Interest cookie for queue only
+  const returnData = await getPostsAndUserData(token, favoriteInterestId);
+
+  // console.info("getServerSideProps", context, returnData);
+
+  const category = returnData.categoriesAndInterestsData.getCategories.filter(
+    (category) =>
+      category.interests.filter(
+        (interest) => interest.id === favoriteInterestId
+      )[0]
+  )[0];
+  const interest =
+    typeof category !== "undefined"
+      ? category.interests.filter(
+          (interest) => interest.id === favoriteInterestId
+        )[0]
+      : null;
+
+  const locale =
+    typeof cookieData.coUserLng !== "undefined"
+      ? cookieData.coUserLng
+      : context.locale;
+
+  return {
+    props: {
+      coUserLng:
+        typeof cookieData.coUserLng !== "undefined"
+          ? cookieData.coUserLng
+          : null,
+      coFavInt: favoriteInterestId,
+      favoriteInterest: interest,
+      ...(await serverSideTranslations(
+        locale,
+        ["interests", "impressions", "settings", "common"],
+        nextI18NextConfig
+      )),
+      fallback: {
+        queueKey: returnData,
+      },
+    },
+  };
+}

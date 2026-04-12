@@ -1,0 +1,172 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       String  @id @unique @default(uuid())
+  email    String  @unique
+  name     String?
+  password String
+
+  generatedUsername String  @unique @default("")
+  chosenUsername    String? @unique @default("")
+
+  credit             Int       @default(0)
+  profileImage       String    @default("")
+  coverImage         String    @default("")
+  role               String    @default("")
+  language           String    @default("")
+  favoriteInterest   Interest? @relation(fields: [favoriteInterestId], references: [id])
+  favoriteInterestId String?
+
+  posts     Post[]
+  threads   Thread[]
+  messages  Message[]  @relation("userMessages")
+  // readMessages Message[]  @relation("userReadMessages")
+  favorites Favorite[]
+
+  pageViews PageView[]
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id          String @id @unique @default(uuid())
+  title       String
+  description String
+
+  generatedTitleSlug String @unique @default("")
+
+  contentType    String // "video" "image" "audio" "text" // set on Interest if needed
+  contentPreview String // url or encoded data depending on contentType
+  content        String
+
+  interest   Interest   @relation(fields: [interestId], references: [id])
+  interestId String
+  modifiers  Modifier[]
+
+  creator   User       @relation(fields: [creatorId], references: [id])
+  creatorId String
+  // threads     Thread[] 
+  messages  Message[]
+  favorites Favorite[]
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Thread {
+  id             String  @id @unique @default(uuid())
+  repliesAllowed Boolean
+
+  users    User[]
+  messages Message[]
+
+  readHistory Record[]
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id      String @id @unique @default(uuid())
+  type    String // "impression" or "reply"
+  content String
+
+  user     User   @relation(name: "userMessages", fields: [userId], references: [id])
+  userId   String
+  thread   Thread @relation(fields: [threadId], references: [id])
+  threadId String
+
+  post   Post?   @relation(fields: [postId], references: [id])
+  postId String?
+
+  // readBy   User[] @relation("userReadMessages")
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Interest {
+  id                    String @id @unique @default(uuid())
+  name                  String
+  generatedInterestSlug String @unique @default("")
+
+  contentType String
+
+  users      User[]
+  posts      Post[]
+  categories Category[]
+  modifiers  Modifier[]
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id                    String @id @unique @default(uuid())
+  name                  String
+  generatedCategorySlug String @unique @default("")
+
+  interests Interest[]
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Modifier {
+  id                    String @id @unique @default(uuid())
+  name                  String
+  generatedModifierSlug String @unique @default("")
+
+  posts     Post[]
+  interests Interest[]
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Record {
+  id      String  @id @unique @default(uuid())
+  name    String
+  content String?
+
+  thread   Thread? @relation(fields: [threadId], references: [id])
+  threadId String?
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model PageView {
+  id String @id @unique @default(uuid())
+
+  url       String
+  ipAddress String
+  city      String?
+  geoData   String
+  user      User?   @relation(fields: [userId], references: [id])
+  userId    String?
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Favorite {
+  id String @id @unique @default(uuid())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}

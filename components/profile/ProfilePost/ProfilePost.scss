@@ -1,0 +1,116 @@
+.profilePost {
+  border-radius: 10px;
+  overflow: hidden;
+
+  .profilePostInner {
+    position: relative;
+
+    // .controlsWrapper {
+    //   position: relative;
+    // }
+
+    a {
+      text-decoration: none;
+    }
+    .postContent {
+      width: 100%;
+      // aspect-ratio: 1;
+      background: $darkBlue;
+      overflow: hidden;
+      position: relative;
+
+      img {
+        display: block;
+        max-height: 100%;
+      }
+      .contentViewer {
+        min-width: 100%;
+        width: auto;
+        min-height: 100%;
+      }
+      .contentType {
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+        background: white;
+        padding: 3px 5px;
+        border-radius: 50px;
+        font-size: 13px;
+        opacity: 0.8;
+      }
+    }
+    .postTitle {
+      min-height: 50px;
+      height: auto;
+      display: flex;
+      align-items: center;
+      background: rgb(250, 250, 250);
+      padding: 10px 10px;
+      border-radius: 10px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      position: relative;
+
+      span {
+        color: black;
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 18px;
+      }
+    }
+    .postControls {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+
+      .controlItems {
+        a {
+          text-decoration: none;
+          width: 35px;
+          height: 35px;
+          background: white;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.2));
+
+          i {
+            color: black;
+            font-size: 20px;
+          }
+        }
+      }
+      .optionsMenu {
+        display: none;
+        position: absolute;
+        background: white;
+        width: 125px;
+        top: 30px;
+        right: 0px;
+        border-radius: 10px;
+        filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.2));
+
+        &.displayed {
+          display: block;
+        }
+
+        .optionsMenuInner {
+          ul {
+            list-style: none;
+            margin: 5px 0;
+
+            li {
+              a {
+                display: block;
+                padding: 7px 10px;
+                font-size: 14px;
+                color: black;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

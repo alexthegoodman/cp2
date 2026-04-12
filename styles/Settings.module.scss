@@ -1,0 +1,63 @@
+/** Variables **/
+
+/** Component Imports **/
+
+/** Page Styles **/
+@media screen and (min-width: $desktopWidth) {
+  section.settingsList {
+    width: $desktopWidth;
+    margin: 0 auto;
+    position: relative;
+    left: 100px;
+    height: 100vh;
+
+    .settingsListInner {
+      .bottomLinks {
+        bottom: 100px;
+      }
+    }
+  }
+}
+
+.settingsList {
+  width: 100%;
+
+  .settingsListInner {
+    padding: 25px;
+
+    a {
+      display: block;
+      font-size: 24px;
+      font-weight: 600;
+      text-decoration: none;
+      color: black;
+      margin-bottom: 35px;
+
+      &:focus {
+        text-decoration: underline;
+      }
+    }
+
+    .bottomLinks {
+      position: absolute;
+      bottom: 35px;
+    }
+  }
+}
+
+.settings {
+  width: 100%;
+
+  .settingsInner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    .form {
+      width: 80%;
+      margin-top: 25px;
+    }
+  }
+}

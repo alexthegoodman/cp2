@@ -1,0 +1,204 @@
+.landingHero {
+  position: relative;
+  min-height: 900px;
+
+  width: 100%;
+
+  .backVisual {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto 90%;
+    width: 50vw;
+    height: 100%;
+  }
+  .contain {
+    width: 1200px;
+    margin: 0 auto;
+
+    .button {
+      margin-top: 15px;
+    }
+
+    .info {
+      padding-left: 600px;
+
+      .infoContain {
+        padding: 50px 0 0 50px;
+
+        .logo {
+          margin-bottom: 35px;
+
+          img {
+            display: block;
+            max-width: 100%;
+            width: 250px;
+          }
+        }
+
+        h1 {
+          font-family: "Playfair Display", serif;
+          color: $red;
+          font-size: 72px;
+          font-style: normal;
+          line-height: 84px;
+          letter-spacing: normal;
+          margin-bottom: 15px;
+
+          strong {
+            font-family: "Playfair Display", serif;
+            font-weight: 600;
+          }
+        }
+        p {
+          font-family: "Playfair Display", serif;
+          word-break: break-word;
+          flex-flow: column;
+          color: #2a2a2a;
+          font-size: 16px;
+          line-height: 150%;
+          text-align: left;
+        }
+      }
+    }
+
+    form {
+      margin-top: 25px;
+      width: 100%;
+      max-width: 350px;
+
+      label {
+        display: block;
+        padding-bottom: 6px;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        color: rgb(42, 42, 42);
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: bold;
+        line-height: 150%;
+      }
+      input {
+        font-size: 15px;
+        line-height: 18px;
+        font-weight: normal;
+        font-family: "Helvetica Neue", Arial, Helvetica, Verdana, sans-serif;
+        display: inline-block;
+        margin: 0 0 24px;
+        min-height: 36px;
+        min-width: 50px;
+        height: auto;
+        padding: 0 0.4em;
+        vertical-align: middle;
+        width: 100%;
+        background-color: #fff;
+        color: rgb(34, 34, 34);
+        border-width: 2px;
+        border-style: solid;
+        border-color: rgb(34, 34, 34);
+        border-image: initial;
+        border-radius: 1px;
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      button,
+      input[type="submit"] {
+        cursor: pointer;
+        display: inline-block;
+        margin-right: 0;
+        overflow: hidden;
+        text-align: center;
+        text-transform: none;
+        vertical-align: middle;
+        white-space: normal;
+        height: auto;
+        min-height: 36px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 0%;
+        border-width: 2px;
+        border-style: solid;
+        border-color: rgb(42, 42, 42);
+        border-image: initial;
+        box-shadow: rgb(42, 42, 42) 8px 8px 1px 0px;
+        padding: 9px 27px;
+        float: left;
+        -webkit-appearance: none;
+        margin-top: 10px;
+        color: rgb(42, 42, 42);
+        width: fit-content;
+        margin: 0;
+        align-self: flex-start;
+        font-size: 16px;
+
+        span {
+          font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+          color: rgb(42, 42, 42);
+          font-size: 16px;
+          font-weight: bold;
+          line-height: inherit;
+          letter-spacing: 0.01em;
+        }
+
+        &:active,
+        &:focus {
+          box-shadow: rgb(42, 42, 42) 4px 4px 1px 0px;
+        }
+        &:disabled {
+          box-shadow: rgb(42, 42, 42) 4px 4px 1px 0px;
+          background: $inputGrey;
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: 1200px) {
+    .contain {
+      width: 100%;
+      padding: 0 25px;
+
+      .info {
+        padding-left: 48vw;
+      }
+    }
+  }
+  @media only screen and (max-width: 720px) {
+    height: auto;
+    min-height: auto;
+
+    .backVisual {
+      position: relative;
+      width: 100%;
+      height: 800px;
+      background-size: 90% auto;
+      // display: none;
+    }
+    .contain {
+      padding-bottom: 25px;
+
+      .info {
+        padding: 0;
+
+        .infoContain {
+          padding: 30px 0 0 0px;
+
+          .logo {
+            width: 200px;
+          }
+
+          h1 {
+            line-height: 48px !important;
+            font-size: 36px !important;
+          }
+          p {
+            font-size: 16px !important;
+            line-height: 150% !important;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Settings",
+  "updateProfile": "Update Profile",
+  "policies": "Policies",
+  "contactSupport": "Contact Support",
+  "chooseLanguage": "Choose Language",
+  "placeholders": {
+    "username": "Username",
+    "profileImage": "Profile Image",
+    "coverImage": "Cover Image"
+  },
+  "errors": {
+    "usernameRequired": "Username is required."
+  }
+}

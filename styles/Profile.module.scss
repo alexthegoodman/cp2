@@ -1,0 +1,26 @@
+/** Variables **/
+
+/** Component Imports **/
+@import "../components/profile/ProfileAvatar/ProfileAvatar";
+@import "../components/profile/ProfileIntro/ProfileIntro";
+@import "../components/profile/ProfilePosts/ProfilePosts";
+@import "../components/profile/ProfilePost/ProfilePost";
+
+/** Page Styles **/
+@media screen and (min-width: $desktopWidth) {
+  .profile {
+    .profileInner {
+      .scrollContainer {
+        top: -75px;
+      }
+    }
+  }
+}
+
+.profile {
+  // background: #e5e5e5;
+
+  .profileInner {
+    width: 100%;
+  }
+}

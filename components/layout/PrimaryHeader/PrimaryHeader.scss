@@ -1,0 +1,173 @@
+@media screen and (min-width: $desktopWidth) {
+  header.primaryHeader,
+  header.primaryHeader.whiteHeader {
+    width: $desktopWidth;
+    margin: 0 auto;
+
+    position: relative;
+    right: -100px;
+
+    &.centerHeader {
+      right: auto;
+    }
+
+    .primaryHeaderInner {
+      .headerIcon {
+        // width: auto;
+        padding: 0 15px;
+
+        a.navOption {
+          color: #737373;
+
+          &.primaryNavOption {
+            .typcn {
+              color: #737373;
+            }
+          }
+
+          &.current {
+            color: $red;
+
+            .typcn {
+              color: $red;
+            }
+
+            &.primaryNavOption {
+              .typcn {
+                color: $red;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.primaryHeader {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+
+  &.inline {
+    position: relative;
+    background: white;
+
+    .primaryHeaderInner {
+      .headerIcon {
+        .typcn {
+          color: black;
+        }
+
+        a {
+          &:focus {
+            background: white;
+            // border-radius: 50%;
+          }
+        }
+      }
+
+      .headerTitleWrapper {
+        .title {
+          padding-top: 6px;
+        }
+      }
+    }
+  }
+
+  &.whiteHeader {
+    .primaryHeaderInner {
+      .headerIcon {
+        font-size: 24px;
+        top: -12px;
+
+        a {
+          color: white;
+        }
+
+        &.headerLeftIcon {
+          background: transparent;
+        }
+      }
+      .headerTitleWrapper {
+        .title {
+          color: white;
+          text-align: center;
+          font-size: 24px;
+          line-height: 30px;
+        }
+      }
+    }
+  }
+
+  .primaryHeaderInner {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 15px 5px 15px;
+
+    .headerIcon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      height: 50px;
+      position: relative;
+      top: -7px;
+
+      filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.2));
+
+      .typcn {
+        font-size: 28px;
+      }
+
+      .typcn-arrow-left {
+        font-size: 36px;
+      }
+
+      a {
+        text-decoration: none;
+        font-size: 24px;
+        text-align: center;
+        padding: 8px;
+      }
+
+      .icon-list {
+        position: relative;
+        left: -2px;
+      }
+
+      .headerButton {
+        background: $frenchRaspberry;
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+
+        a,
+        span {
+          color: white;
+        }
+      }
+    }
+    .headerTitleWrapper {
+      .title {
+        font-size: 24px;
+        font-weight: 600;
+
+        max-width: 60vw;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+.leftHeaderContainer {
+  display: flex;
+  flex-direction: column;
+
+  position: absolute;
+  top: 0;
+}
