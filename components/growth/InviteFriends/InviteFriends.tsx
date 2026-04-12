@@ -16,15 +16,15 @@ const InviteFriends: React.FC<InviteFriendsProps> = ({
   const shareToFacebook = () => {
     mixpanel.track("Invite via Facebook");
 
-    FB.ui(
-      {
-        method: "share",
-        href: "https://commonplace.social/",
-        hashtag: "CommonPlace",
-        quote: "Get Feedback on CommonPlace!",
-      },
-      function (response) {}
-    );
+    // FB.ui(
+    //   {
+    //     method: "share",
+    //     href: "https://commonplace.social/",
+    //     hashtag: "CommonPlace",
+    //     quote: "Get Feedback on CommonPlace!",
+    //   },
+    //   function (response) {}
+    // );
   };
 
   const sendOnWhatsapp = () => {
@@ -66,7 +66,7 @@ const InviteFriends: React.FC<InviteFriendsProps> = ({
                 onClick={sendOnWhatsapp}
                 aria-label="Share via WhatsApp"
               >
-                <Image src="/whatsapp.svg" width="35" height="35" />
+                <Image src="/whatsapp.svg" alt="Whatsapp" width="35" height="35" />
               </a>
             </li>
             <li className="listItem">

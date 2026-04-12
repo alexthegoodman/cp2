@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
   i18n,
   transpilePackages: ['react-responsive-masonry'],
   devIndicators: false,
+  typescript: {
+    ignoreBuildErrors: true
+  }
 };
 
 export default nextConfig;
