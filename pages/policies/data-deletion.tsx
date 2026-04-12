@@ -15,10 +15,7 @@ const DataDeletion: NextPage = () => {
           inline={true}
           leftIcon={
             <Link href="/policies">
-              <a>
-                {/* <div className="feather-icon icon-arrow-left"></div> */}
                 <i className="typcn typcn-arrow-left"></i>
-              </a>
             </Link>
           }
           title="Data Deletion Instructions"

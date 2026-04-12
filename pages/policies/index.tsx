@@ -12,10 +12,7 @@ const Policies: NextPage = () => {
           inline={true}
           leftIcon={
             <Link href="/settings">
-              <a>
-                {/* <div className="feather-icon icon-arrow-left"></div> */}
                 <i className="typcn typcn-arrow-left"></i>
-              </a>
             </Link>
           }
           title="Policies"
@@ -24,19 +21,19 @@ const Policies: NextPage = () => {
         <section className="settingsList">
           <div className="settingsListInner">
             <Link href="/policies/terms/">
-              <a>Terms of Use</a>
+              Terms of Use
             </Link>
             <Link href="/policies/privacy/">
-              <a>Privacy Policy</a>
+              Privacy Policy
             </Link>
             <Link href="/policies/cookies/">
-              <a>Cookie Policy</a>
+              Cookie Policy
             </Link>
             <Link href="/policies/guidelines/">
-              <a>Community Guidelines</a>
+              Community Guidelines
             </Link>
             <Link href="/policies/data-deletion/">
-              <a>Data Deletion Instructions</a>
+              Data Deletion Instructions
             </Link>
           </div>
         </section>

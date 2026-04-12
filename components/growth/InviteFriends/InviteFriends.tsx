@@ -2,7 +2,7 @@ import Image from "next/image";
 import * as React from "react";
 
 import { InviteFriendsProps } from "./InviteFriends.d";
-import { useT as useTranslation } from "next-i18next/client";
+import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import MixpanelBrowser from "../../../helpers/MixpanelBrowser";
 
 const InviteFriends: React.FC<InviteFriendsProps> = ({

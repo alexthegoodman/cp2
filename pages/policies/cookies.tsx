@@ -13,9 +13,7 @@ const Cookies: NextPage = () => {
           inline={true}
           leftIcon={
             <Link href="/policies">
-              <a>
                 <i className="typcn typcn-arrow-left"></i>
-              </a>
             </Link>
           }
           title="Cookie Policy"

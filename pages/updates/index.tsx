@@ -14,7 +14,7 @@ import DesktopNavigation from "../../components/layout/DesktopNavigation/Desktop
 import { GQLClient } from "@/lib/GQLClient";
 import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config.js";
-import { useT as useTranslation } from "next-i18next/client";
+import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import apiClient from "../../helpers/APIClient";
 
 const getUserThreadData = async (token) => {

@@ -8,7 +8,7 @@ import useSWR from "swr";
 import InterestGrid from "../components/interests/InterestGrid/InterestGrid";
 import InterestPreview from "../components/interests/InterestPreview/InterestPreview";
 import PrimaryHeader from "../components/layout/PrimaryHeader/PrimaryHeader";
-import { useT as useTranslation } from "next-i18next/client";
+import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import FormMessage from "../components/fields/FormMessage/FormMessage";
 import apiClient from "../helpers/APIClient";
 

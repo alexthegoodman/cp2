@@ -1,4 +1,4 @@
-import { useT as useTranslation } from "next-i18next/client";
+import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import * as React from "react";
 import { useCookies } from "react-cookie";
 import apiClient from "../../../helpers/APIClient";

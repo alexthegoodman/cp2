@@ -17,7 +17,7 @@ import StepCounter from "../components/forms/StepCounter/StepCounter";
 import { InterestsContent } from "./interests";
 import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import nextI18NextConfig from "../next-i18next.config.js";
-import { useT as useTranslation } from "next-i18next/client";
+import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import apiClient from "../helpers/APIClient";
 import MixpanelBrowser from "../helpers/MixpanelBrowser";
 

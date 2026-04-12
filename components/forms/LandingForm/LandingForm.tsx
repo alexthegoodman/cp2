@@ -1,4 +1,4 @@
-import { useT as useTranslation } from "next-i18next/client";
+import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import Link from "next/link";
 import * as React from "react";
 import AuthForm from "../AuthForm/AuthForm";
@@ -21,7 +21,7 @@ const LandingForm: React.FC<LandingFormProps> = ({
         <span>
           {t("auth:orYouMay", { defaultLng })}{" "}
           <Link href="/sign-in">
-            <a>{t("auth:signIn", { defaultLng })}</a>
+            {t("auth:signIn", { defaultLng })}
           </Link>
         </span>
       </div>

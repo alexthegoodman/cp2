@@ -15,7 +15,7 @@ import PrimaryHeader from "../../components/layout/PrimaryHeader/PrimaryHeader";
 import { GQLClient } from "@/lib/GQLClient";
 import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config.js";
-import { useT as useTranslation } from "next-i18next/client";
+import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import apiClient from "../../helpers/APIClient";
 
 const getUserData = async (token) => {
@@ -76,10 +76,7 @@ const SettingsContent = ({ data }) => {
           inline={true}
           leftIcon={
             <Link href="/settings">
-              <a>
-                {/* <div className="feather-icon icon-arrow-left"></div> */}
                 <i className="typcn typcn-arrow-left"></i>
-              </a>
             </Link>
           }
           title={t("settings:updateProfile")}

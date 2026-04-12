@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useT as useTranslation } from "next-i18next/client";
+import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config.js";
 import { NextSeo } from "next-seo";
@@ -54,13 +54,13 @@ const Settings: NextPage = () => {
         <section className="settingsList">
           <div className="settingsListInner">
             <Link href="/settings/update-profile/">
-              <a>{t("settings:updateProfile")}</a>
+              {t("settings:updateProfile")}
             </Link>
             {/* <Link href="/settings/change-password/">
-              <a>Change Password</a>
+              Change Password
             </Link> */}
             <Link href="/policies/">
-              <a>{t("settings:policies")}</a>
+              {t("settings:policies")}
             </Link>
             <a href="mailto:admin@commonplace.social">
               {t("settings:contactSupport")}

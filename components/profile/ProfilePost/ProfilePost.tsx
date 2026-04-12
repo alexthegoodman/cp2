@@ -45,7 +45,7 @@ const ProfilePost: React.FC<ProfilePostProps> = ({
       <div className="profilePost">
         <div className="profilePostInner">
           <Link href={postUrl}>
-            <a>
+            <div>
               <div className="postContent">
                 {/* <img alt="" title="" src={post.content} /> */}
                 <ContentViewer
@@ -60,7 +60,7 @@ const ProfilePost: React.FC<ProfilePostProps> = ({
               <div className="postTitle">
                 <span>{post.title}</span>
               </div>
-            </a>
+            </div>
           </Link>
           {usersOwnProfile ? (
             <>

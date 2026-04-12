@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useT as useTranslation } from "next-i18next/client";
+import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import nextI18NextConfig from "../next-i18next.config.js";
 import Link from "next/link";
@@ -27,7 +27,7 @@ const SignUp: NextPage = () => {
             <span>
               {t("auth:orYouMay")}{" "}
               <Link href="/sign-in">
-                <a>{t("auth:signIn")}</a>
+                {t("auth:signIn")}
               </Link>
             </span>
           </div>

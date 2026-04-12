@@ -7,7 +7,7 @@ import { useEffect } from "react";
 // import LogRocket from "logrocket";
 import { appWithTranslation } from "next-i18next/pages";
 import nextI18NextConfig from "../next-i18next.config.js";
-import { useCookies } from "react-cookie";
+import { CookiesProvider, useCookies } from "react-cookie";
 import apiClient from "../helpers/APIClient";
 import { GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
 
@@ -107,10 +107,20 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Script dangerouslySetInnerHTML={{ __html: initializeFacebookSDK }} />
       {/* <Script dangerouslySetInnerHTML={{ __html: initializeMetaPixel }} /> */}
       <Script async defer src="https://connect.facebook.net/en_US/sdk.js" />
+      
       <Component {...pageProps} />
+      
       {/* </section> */}
     </>
   );
 }
 
-export default appWithTranslation(MyApp, nextI18NextConfig);
+const AppWithProviders = ({ ...props }: AppProps) => {
+  return (
+    <CookiesProvider>
+      <MyApp {...props} />
+    </CookiesProvider>
+  )
+}
+
+export default appWithTranslation(AppWithProviders, nextI18NextConfig);
