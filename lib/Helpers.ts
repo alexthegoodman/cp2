@@ -1,4 +1,6 @@
 import { nanoid } from "nanoid";
+import slugify from "slugify";
+
 export default class Helpers {
   constructor() {}
 
@@ -50,5 +52,9 @@ export default class Helpers {
     const generatedUsername = emailUsername + "-" + pin;
 
     return generatedUsername;
+  }
+
+  slugify(str) {
+    return slugify(str, { lower: true, strict: true }) + "-" + nanoid(10);
   }
 }
