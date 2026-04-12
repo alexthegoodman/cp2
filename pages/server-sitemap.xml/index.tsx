@@ -1,15 +1,13 @@
 // pages/server-sitemap.xml/index.tsx
 
-import { getServerSideSitemap } from "next-sitemap";
+import { getServerSideSitemapLegacy } from "next-sitemap";
 import { GetServerSideProps } from "next";
-
-import { cpGraphqlUrl } from "../../def/urls";
+import apiClient from "../../helpers/APIClient";
 
 const getURLData = async () => {
-  const profileURLs = await request(cpGraphqlUrl, profileURLsQuery);
-  const postURLs = await request(cpGraphqlUrl, postURLsQuery);
+  const data = await apiClient.get("/sitemap");
 
-  const returnData = [...profileURLs.getProfileURLs, ...postURLs.getPostURLs];
+  const returnData = [...data.getProfileURLs, ...data.getPostURLs];
 
   return returnData;
 };
@@ -30,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   });
 
-  return getServerSideSitemap(ctx, fields);
+  return getServerSideSitemapLegacy(ctx, fields);
 };
 
 // Default export to prevent next.js errors

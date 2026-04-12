@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
-import { cpDomain, cpGraphqlUrl } from "../../../def/urls";
+import { cpDomain } from "../../../def/urls";
 const { DateTime } = require("luxon");
 // import LogRocket from "logrocket";
 
@@ -15,6 +15,7 @@ import Utilities from "@/lib";
 import { CookieSettings } from "../../../pages/settings";
 import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import MixpanelBrowser from "../../../helpers/MixpanelBrowser";
+import apiClient from "../../../helpers/APIClient";
 
 const AuthForm: React.FC<AuthFormProps> = ({
   ref = null,
@@ -56,34 +57,31 @@ const AuthForm: React.FC<AuthFormProps> = ({
       if (type === "sign-in") {
         mixpanel.track("Sign In - Attempt", { email: data.email });
 
-        userIdData = await request(
-          cpGraphqlUrl,
-          authenticateQuery,
+        userIdData = await apiClient.post(
+          "/authenticate",
           {},
           {
-            Authorization: authorizationHeader,
+            headers: {
+              Authorization: authorizationHeader,
+            },
           }
         );
 
-        token = userIdData.authenticate;
+        token = userIdData.token;
       } else if (type === "sign-up") {
         mixpanel.track("Sign Up - Attempt", { email: data.email });
 
-        userIdData = await request(
-          cpGraphqlUrl,
-          registerMutation,
+        userIdData = await apiClient.post(
+          "/user",
           {},
           {
-            Authorization: authorizationHeader,
+            headers: {
+              Authorization: authorizationHeader,
+            },
           }
         );
 
-        token = userIdData.registerUser;
-
-        // if (typeof fbq !== "undefined") {
-        //   console.info("trackCustom SignUp");
-        //   fbq("trackCustom", "SignUp", {});
-        // }
+        token = userIdData.token;
 
         const ReactPixel = require("react-facebook-pixel");
         ReactPixel.default.trackCustom("SignUp", {});
@@ -111,12 +109,6 @@ const AuthForm: React.FC<AuthFormProps> = ({
 
       console.info("cookie set with token");
 
-      // try {
-      //   LogRocket.identify(data.email);
-      // } catch (error) {
-      //   console.error("LogRocket error", error);
-      // }
-
       console.info("redirect to queue");
 
       // cleanup and
@@ -124,7 +116,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
       router.push("/queue");
     } catch (error: any) {
       console.error(error);
-      const errorMessage = error?.response?.errors[0].message;
+      const errorMessage = error?.response?.errors?.[0]?.message || error.message;
       setFormErrorMessage(errorMessage);
       setSubmitLoading(false);
     }

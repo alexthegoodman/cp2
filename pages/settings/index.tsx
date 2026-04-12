@@ -40,11 +40,8 @@ const Settings: NextPage = () => {
           leftIcon={
             <>
               <DesktopNavigation />
-              <Link href="/profile">
-                <a className="mobileOnly">
-                  {/* <div className="feather-icon icon-arrow-left"></div> */}
+              <Link href="/profile" className="mobileOnly">
                   <i className="typcn typcn-arrow-left"></i>
-                </a>
               </Link>
             </>
           }

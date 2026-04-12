@@ -75,10 +75,8 @@ const ThreadContent = () => {
           leftIcon={
             <>
               <DesktopNavigation />
-              <Link href="/updates">
-                <a className="mobileOnly" aria-label="Go Back to Updates">
+              <Link href="/updates" className="mobileOnly" aria-label="Go Back to Updates">
                   <i className="typcn typcn-arrow-left"></i>
-                </a>
               </Link>
             </>
           }

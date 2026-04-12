@@ -1,3 +1,5 @@
+import { cpDomainwp, protocol } from "@/def/urls";
+
 export class APIClient {
   token: string | null = null;
   baseUrl: string = "/api";
@@ -29,13 +31,14 @@ export class APIClient {
 
     const headers: any = {
       "Content-Type": "application/json",
+      ...options.headers,
     };
 
-    if (this.token) {
+    if (this.token && !headers["Authorization"]) {
       headers["Authorization"] = `Bearer ${this.token}`;
     }
 
-    const response = await fetch(url, {
+    const response = await fetch(protocol + cpDomainwp + url, {
       method,
       headers,
       body: body ? JSON.stringify(body) : undefined,
@@ -49,20 +52,20 @@ export class APIClient {
     return response.json();
   }
 
-  async get(endpoint: string, params?: any) {
-    return this.request(endpoint, { method: "GET", params });
+  async get(endpoint: string, params?: any, options: any = {}) {
+    return this.request(endpoint, { method: "GET", params, ...options });
   }
 
-  async post(endpoint: string, body?: any) {
-    return this.request(endpoint, { method: "POST", body });
+  async post(endpoint: string, body?: any, options: any = {}) {
+    return this.request(endpoint, { method: "POST", body, ...options });
   }
 
-  async put(endpoint: string, body?: any) {
-    return this.request(endpoint, { method: "PUT", body });
+  async put(endpoint: string, body?: any, options: any = {}) {
+    return this.request(endpoint, { method: "PUT", body, ...options });
   }
 
-  async delete(endpoint: string) {
-    return this.request(endpoint, { method: "DELETE" });
+  async delete(endpoint: string, options: any = {}) {
+    return this.request(endpoint, { method: "DELETE", ...options });
   }
 }
 

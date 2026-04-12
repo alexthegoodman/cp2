@@ -54,11 +54,8 @@ const UpdatesContent: NextPage = () => {
           leftIcon={
             <>
               <DesktopNavigation />
-              <Link href="/queue">
-                <a className="mobileOnly" aria-label="Go Back to Queue">
-                  {/* <div className="feather-icon icon-list"></div> */}
+              <Link className="mobileOnly" aria-label="Go Back to Queue" href="/queue">
                   <i className="typcn typcn-equals"></i>
-                </a>
               </Link>
             </>
           }

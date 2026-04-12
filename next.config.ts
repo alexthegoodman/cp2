@@ -7,7 +7,9 @@ import { i18n } from "./next-i18next.config";
 const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
-  i18n
+  i18n,
+  transpilePackages: ['react-responsive-masonry'],
+  devIndicators: false,
 };
 
 export default nextConfig;

@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+// import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { nanoid } from "nanoid";
 import ERROR_CODES from "./ERROR_CODES";
 const { DateTime } = require("luxon");
@@ -8,13 +8,13 @@ export default class AWS {
 
   constructor() {
     if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
-      this.s3Client = new S3Client({
-        region: this.REGION,
-        credentials: {
-          accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        },
-      });
+      // this.s3Client = new S3Client({
+      //   region: this.REGION,
+      //   credentials: {
+      //     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      //     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      //   },
+      // });
     }
   }
 
@@ -73,11 +73,11 @@ export default class AWS {
       };
 
       try {
-        const data = await this.s3Client.send(
-          new PutObjectCommand(bucketParams)
-        );
+        // const data = await this.s3Client.send(
+        //   new PutObjectCommand(bucketParams)
+        // );
 
-        console.info("uploadAsset complete", data, key);
+        // console.info("uploadAsset complete", data, key);
 
         return key;
       } catch (err) {

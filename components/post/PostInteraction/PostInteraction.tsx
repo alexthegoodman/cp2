@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useCookies } from "react-cookie";
 import apiClient from "../../../helpers/APIClient";
-import { RWebShare } from "react-web-share";
+// import { RWebShare } from "react-web-share";
 
 import { PostInteractionProps } from "./PostInteraction.d";
 import Strings from "../../../helpers/Strings";
@@ -53,7 +53,7 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
         >
           <i className="typcn typcn-heart-outline"></i>
         </a>
-        <RWebShare
+        {/* <RWebShare
           data={{
             text: `Check out ${post?.title} on CommonPlace!`,
             url: postUrl,
@@ -64,7 +64,7 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
           <a href="#!" className="interaction">
             <i className="typcn typcn-export-outline"></i>
           </a>
-        </RWebShare>
+        </RWebShare> */}
       </div>
     </div>
   );

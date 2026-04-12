@@ -23,7 +23,7 @@ const getUserData = async (token) => {
   return { getUser: userData };
 };
 
-export const ProfileContent = ({ data, mutate, usersOwnProfile = false }) => {
+export const ProfileContent = ({ data, mutate, usersOwnProfile = false }: { data: any; mutate?: any; usersOwnProfile?: boolean; }) => {
   const profileSEOStatement =
     data?.getUser?.chosenUsername + "'s Profile on CommonPlace";
 
@@ -54,11 +54,8 @@ export const ProfileContent = ({ data, mutate, usersOwnProfile = false }) => {
             <>
               <DesktopNavigation />
               {usersOwnProfile ? (
-                <Link href="/settings">
-                  <a className="mobileOnly" aria-label="Go to Settings">
-                    {/* <div className="feather-icon icon-settings"></div> */}
+                <Link href="/settings" className="mobileOnly" aria-label="Go to Settings">
                     <i className="typcn typcn-cog"></i>
-                  </a>
                 </Link>
               ) : (
                 <></>
@@ -67,11 +64,8 @@ export const ProfileContent = ({ data, mutate, usersOwnProfile = false }) => {
           }
           title={""}
           rightIcon={
-            <Link href="/queue">
-              <a className="mobileOnly" aria-label="Go to Queue">
-                {/* <div className="feather-icon icon-list"></div> */}
+            <Link href="/queue" className="mobileOnly" aria-label="Go to Queue">
                 <i className="typcn typcn-equals"></i>
-              </a>
             </Link>
           }
         />

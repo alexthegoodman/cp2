@@ -23,49 +23,41 @@ const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
       aria-label="Primary Navigation"
     >
       <div className="primaryNavigationInner">
-        <Link href="/upload">
-          <a
-            className={`navOption primaryNavOption ${
+        <Link href="/upload" className={`navOption primaryNavOption ${
               basePath === "upload" ? "current" : ""
             }`}
             aria-label="Upload"
-            tabIndex={1}
-          >
+            tabIndex={1}>
+          <div>
             {/* <div className="feather-icon icon-upload"></div> */}
             <i className="typcn typcn-plus"></i>
             <span className="navLabel desktopOnly">{t("common:upload")}</span>
-          </a>
+          </div>
         </Link>
         <div className="desktopOnly">
-          <Link href="/queue">
-            <a
-              className={`navOption ${basePath === "queue" ? "current" : ""}`}
+          <Link href="/queue" className={`navOption ${basePath === "queue" ? "current" : ""}`}
               aria-label="Upload"
-              tabIndex={1}
-            >
+              tabIndex={1}>
+            <div>
               {/* <div className="feather-icon icon-upload"></div> */}
               <i className="typcn typcn-equals"></i>
               <span className="navLabel desktopOnly">{t("common:queue")}</span>
-            </a>
+            </div>
           </Link>
         </div>
-        <Link href="/profile">
-          <a
-            className={`navOption ${basePath === "profile" ? "current" : ""}`}
+        <Link href="/profile" className={`navOption ${basePath === "profile" ? "current" : ""}`}
             aria-label="Profile"
-            tabIndex={2}
-          >
+            tabIndex={2}>
+          <div>
             {/* <div className="feather-icon icon-user"></div> */}
             <i className="typcn typcn-user-outline"></i>
             <span className="navLabel desktopOnly">{t("common:profile")}</span>
-          </a>
+          </div>
         </Link>
-        <Link href="/updates">
-          <a
-            className={`navOption ${basePath === "updates" ? "current" : ""}`}
+        <Link href="/updates" className={`navOption ${basePath === "updates" ? "current" : ""}`}
             aria-label="Updates"
-            tabIndex={3}
-          >
+            tabIndex={3}>
+          <div>
             {/* <div className="feather-icon icon-message-square"></div> */}
             {threadCount > 0 ? (
               <span
@@ -79,23 +71,20 @@ const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
             )}
             <i className="typcn typcn-messages"></i>
             <span className="navLabel desktopOnly">{t("common:updates")}</span>
-          </a>
+          </div>
         </Link>
         <div className="desktopOnly">
-          <Link href="/settings">
-            <a
-              className={`navOption ${
+          <Link href="/settings" className={`navOption ${
                 basePath === "settings" ? "current" : ""
               }`}
               aria-label="Settings"
-              tabIndex={2}
-            >
-              {/* <div className="feather-icon icon-user"></div> */}
+              tabIndex={2}>
+                <div>
               <i className="typcn typcn-cog"></i>
               <span className="navLabel desktopOnly">
                 {t("common:settings")}
               </span>
-            </a>
+              </div>
           </Link>
         </div>
       </div>

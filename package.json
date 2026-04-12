@@ -7,8 +7,8 @@
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "db:clean": "ts-node prisma/seed/clean",
-    "db:seed": "ts-node prisma/seed"
+    "db:clean": "tsx prisma/seed/clean",
+    "db:seed": "tsx prisma/seed"
   },
   "dependencies": {
     "@faker-js/faker": "^10.4.0",
@@ -41,7 +41,7 @@
     "react-responsive-masonry": "^2.7.1",
     "slugify": "^1.6.6",
     "swr": "^2.4.1",
-    "ts-node": "^10.9.2"
+    "tsx": "^4.21.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

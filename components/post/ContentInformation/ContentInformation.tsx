@@ -37,7 +37,7 @@ const ContentInformation: React.FC<ContentInformationProps> = ({
           <PostInteraction post={post} />
         </div>
 
-        {queue && post?.impressions.length > 0 ? (
+        {queue && post && post?.impressions && post?.impressions.length > 0 ? (
           <ImpressionTicker impressions={post?.impressions} />
         ) : (
           <>

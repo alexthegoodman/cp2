@@ -13,10 +13,15 @@ export const useUnreadThreads = (threads = [], currentUsername) => {
     );
     lastMessage = lastMessage[0];
 
-    let lastReadRecord = thread.readHistory.filter(
+    let lastReadRecord = thread.readHistory?.filter(
       (record, i) => record.content === currentUsername
     );
-    lastReadRecord = lastReadRecord[lastReadRecord.length - 1];
+
+    if (!lastReadRecord) {
+      return;
+    }
+
+    lastReadRecord = lastReadRecord[lastReadRecord?.length - 1];
 
     // console.info(
     //   "lastReadRecord",

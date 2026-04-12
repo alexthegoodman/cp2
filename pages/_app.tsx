@@ -90,8 +90,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       {/* <section className="globalContainer"> */}
       <GoogleAnalytics />
-      <Head>
-        <link rel="stylesheet" href="/globals.min.css" />
+      {/* <Head> */}
+        {/* <link rel="stylesheet" href="/globals.min.css" /> */}
         {/** Meta Pixel */}
         {/* <noscript>
           <img
@@ -101,7 +101,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             src="https://www.facebook.com/tr?id=606669884534740&ev=PageView&noscript=1"
           />
         </noscript> */}
-      </Head>
+      {/* </Head> */}
       {/** TODO: strategy="afterInteractive" ? */}
       <Script dangerouslySetInnerHTML={{ __html: initializeHotjar }} />
       <Script dangerouslySetInnerHTML={{ __html: initializeFacebookSDK }} />

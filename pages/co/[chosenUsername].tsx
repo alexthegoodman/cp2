@@ -4,29 +4,14 @@ import { serverSideTranslations } from "next-i18next/pages/serverSideTranslation
 import { useRouter } from "next/router";
 import useSWR, { SWRConfig } from "swr";
 import Utilities from "@/lib";
-import { cpGraphqlUrl } from "../../def/urls";
 import nextI18nextConfig from "../../next-i18next.config";
 import { ProfileContent } from "../profile";
+import apiClient from "../../helpers/APIClient";
 
 const getUserAndPostsByUsernameData = async (chosenUsername) => {
-  const userData = await request(cpGraphqlUrl, userByUsernameQuery, {
-    chosenUsername,
-  });
+  const data = await apiClient.get(`/user/${chosenUsername}`);
 
-  const postsData = await request(cpGraphqlUrl, postsByUsernameQuery, {
-    chosenUsername,
-  });
-
-  const returnData = {
-    getUser: {
-      ...userData.getUserByUsername,
-      posts: postsData.getPostsByUsername,
-    },
-  };
-
-  // console.info("returnData", returnData);
-
-  return returnData;
+  return data;
 };
 
 const CoProfileDataWrapper = () => {
