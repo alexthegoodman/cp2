@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useT as useTranslation } from "next-i18next/client";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config.js";
 import { NextSeo } from "next-seo";
 import Link from "next/link";

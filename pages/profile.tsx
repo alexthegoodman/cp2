@@ -14,7 +14,7 @@ import { useImageUrl } from "../hooks/useImageUrl";
 import DesktopNavigation from "../components/layout/DesktopNavigation/DesktopNavigation";
 import { GQLClient } from "@/lib/GQLClient";
 import nextI18nextConfig from "../next-i18next.config";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import apiClient from "../helpers/APIClient";
 
 const getUserData = async (token) => {

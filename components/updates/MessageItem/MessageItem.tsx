@@ -6,7 +6,7 @@ import { MessageItemProps } from "./MessageItem.d";
 import { DateTime } from "luxon";
 import { useImageUrl } from "../../../hooks/useImageUrl";
 import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
+import { useT as useTranslation } from "next-i18next/client";
 
 const MessageItem: React.FC<MessageItemProps> = ({
   ref = null,

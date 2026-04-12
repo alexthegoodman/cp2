@@ -6,4 +6,5 @@ export interface ContentViewerProps {
   preview?: string;
   content: string;
   mini?: boolean;
+  alt?: string;
 }

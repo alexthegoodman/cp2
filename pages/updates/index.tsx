@@ -12,12 +12,12 @@ import { NextSeo } from "next-seo";
 import InviteFriends from "../../components/growth/InviteFriends/InviteFriends";
 import DesktopNavigation from "../../components/layout/DesktopNavigation/DesktopNavigation";
 import { GQLClient } from "@/lib/GQLClient";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config.js";
-import { useTranslation } from "next-i18next";
+import { useT as useTranslation } from "next-i18next/client";
 import apiClient from "../../helpers/APIClient";
 
-const getUserData = async (token) => {
+const getUserThreadData = async (token) => {
   apiClient.setupClient(token);
 
   const userData = await apiClient.get("/user");
@@ -39,8 +39,8 @@ const UpdatesContent: NextPage = () => {
   });
 
   const { unreadThreads, unreadThreadCount } = useUnreadThreads(
-    data?.threads,
-    data?.user?.generatedUsername
+    data?.getUserThreads,
+    data?.getUser?.generatedUsername
   );
 
   // console.info("UpdatesContent", data);
@@ -67,8 +67,8 @@ const UpdatesContent: NextPage = () => {
         />
         <InviteFriends />
         <div className="scrollContainer updatesContainer">
-          {data?.threads?.length > 0 ? (
-            data?.threads?.map((thread, i) => {
+          {data?.getUserThreads?.length > 0 ? (
+            data?.getUserThreads?.map((thread, i) => {
               const previewMessage = thread.messages[0];
 
               const match = unreadThreads.find(

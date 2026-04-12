@@ -5,11 +5,13 @@ import Script from "next/script";
 import { useEffect } from "react";
 // import * as FullStory from "@fullstory/browser";
 // import LogRocket from "logrocket";
-import { appWithTranslation } from "next-i18next";
+import { appWithTranslation } from "next-i18next/pages";
 import nextI18NextConfig from "../next-i18next.config.js";
 import { useCookies } from "react-cookie";
 import apiClient from "../helpers/APIClient";
 import { GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
+
+import "../styles/globals.scss";
 
 // LogRocket.init("binhki/commonplace-dev");
 

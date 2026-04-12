@@ -13,9 +13,9 @@ import FormMessage from "../../components/fields/FormMessage/FormMessage";
 import FormUpload from "../../components/fields/FormUpload/FormUpload";
 import PrimaryHeader from "../../components/layout/PrimaryHeader/PrimaryHeader";
 import { GQLClient } from "@/lib/GQLClient";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config.js";
-import { useTranslation } from "next-i18next";
+import { useT as useTranslation } from "next-i18next/client";
 import apiClient from "../../helpers/APIClient";
 
 const getUserData = async (token) => {

@@ -7,4 +7,7 @@ export interface ProfilePostsProps {
   className?: string;
   onClick?: (e: MouseEvent) => void;
   posts: Post[];
+  creator: boolean,
+  usersOwnProfile: boolean,
+  mutate: boolean
 }

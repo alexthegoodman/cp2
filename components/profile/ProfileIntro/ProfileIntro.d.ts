@@ -4,4 +4,7 @@ export interface ProfileIntroProps {
   onClick?: (e: MouseEvent) => void;
   profileImage?: string;
   coverImage?: string;
+  alt?: string;
+  title?: string;
+  subTitle: string;
 }

@@ -12,9 +12,9 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { NextSeo } from "next-seo";
 import DesktopNavigation from "../../components/layout/DesktopNavigation/DesktopNavigation";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config.js";
-import { useTranslation } from "next-i18next";
+import { useT as useTranslation } from "next-i18next/client";
 import apiClient from "../../helpers/APIClient";
 
 const getUserAndThreadData = async (token, threadId) => {

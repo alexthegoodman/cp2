@@ -1,4 +1,4 @@
-import { useTranslation } from "next-i18next";
+import { useT as useTranslation } from "next-i18next/client";
 import * as React from "react";
 
 import { StepCounterProps } from "./StepCounter.d";

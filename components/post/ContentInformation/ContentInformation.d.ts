@@ -3,4 +3,5 @@ export interface ContentInformationProps {
   className?: string;
   onClick?: (e: MouseEvent) => void;
   post: any;
+  queue?: boolean;
 }

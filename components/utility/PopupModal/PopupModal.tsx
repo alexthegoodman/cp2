@@ -10,7 +10,7 @@ const PopupModal: React.FC<PopupModalProps> = ({
   onCancel = () => console.info("Cancel PopupModal"),
   controls = <></>,
 }) => {
-  const clickHandler = (e: MouseEvent) => onClick(e);
+  // const clickHandler = (e: MouseEvent) => onClick(e);
   return (
     <section className="popupModal">
       <div className="popupModalInner">

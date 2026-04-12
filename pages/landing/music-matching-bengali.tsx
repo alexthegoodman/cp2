@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import * as React from "react";
 import AuthForm from "../../components/forms/AuthForm/AuthForm";
 import LandingForm from "../../components/forms/LandingForm/LandingForm";

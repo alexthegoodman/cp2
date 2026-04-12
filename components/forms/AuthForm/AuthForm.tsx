@@ -13,7 +13,7 @@ import FormMessage from "../../fields/FormMessage/FormMessage";
 import { AuthFormProps } from "./AuthForm.d";
 import Utilities from "@/lib";
 import { CookieSettings } from "../../../pages/settings";
-import { useTranslation } from "next-i18next";
+import { useT as useTranslation } from "next-i18next/client";
 import MixpanelBrowser from "../../../helpers/MixpanelBrowser";
 
 const AuthForm: React.FC<AuthFormProps> = ({

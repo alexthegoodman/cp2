@@ -1,4 +1,4 @@
-import { useTranslation } from "next-i18next";
+import { useT as useTranslation } from "next-i18next/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";

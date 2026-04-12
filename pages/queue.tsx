@@ -21,9 +21,9 @@ import { InterestsContent, PopularInterests } from "./interests";
 import { NextSeo } from "next-seo";
 import BrandName from "../components/layout/BrandName/BrandName";
 // import { GQLClient } from "@/lib/GQLClient";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import nextI18NextConfig from "../next-i18next.config.js";
-import { useTranslation } from "next-i18next";
+import { useT as useTranslation } from "next-i18next/client";
 import LanguagePicker from "../components/queue/LanguagePicker/LanguagePicker";
 import ImpressionTicker from "../components/post/ImpressionTicker/ImpressionTicker";
 import PickerButton from "../components/queue/PickerButton/PickerButton";
@@ -54,7 +54,7 @@ const getPostsAndUserData = async (token, interestId = null) => {
 
   const categoriesAndInterestsData = await apiClient.get("/interests");
 
-  let threads = [];
+  let threads: any = [];
   if (Array.isArray(userThreadData)) {
     threads = userThreadData;
   }
@@ -102,7 +102,7 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
 
   useEffect(() => {
     // console.info("check queue", cache.get("queueKey"));
-    cache.clear();
+    // cache.clear(); // not a function?
     mutate(() => getPostsAndUserData(token, selectedInterest?.id));
   }, []);
 
@@ -110,7 +110,7 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
 
   // const [queueIndex, setQueueIndex] = useState(0);
   const [currentView, setCurrentView] = useState<string | null>(
-    router.query.view
+    router.query.view as string
   );
   const [exploreHasMore, setExploreHasMore] = useState(true);
   const [explorePostsPage, setExplorePostsPage] = useState(1);
@@ -490,7 +490,7 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
                 <div className="leftHeaderContainer">
                   <BrandName />
                   <ViewSwitcher
-                    initialView={router.query.view}
+                    initialView={router.query.view as string}
                     onClick={switchView}
                     className="mobileOnly"
                   />
@@ -599,6 +599,7 @@ const Queue: NextPage<{
   fallback: any;
   coUserLng: string;
   coFavInt: string;
+  favoriteInterest: string;
 }> = ({ fallback, coUserLng, coFavInt, favoriteInterest }) => {
   const [state, dispatch] = useReducer(QueueContextReducer, QueueContextState);
 

@@ -12,7 +12,7 @@ import PrimaryHeader from "../../../components/layout/PrimaryHeader/PrimaryHeade
 import { cpDomain, cpGraphqlUrl } from "../../../def/urls";
 import { useImageUrl } from "../../../hooks/useImageUrl";
 import { useRouterBack } from "../../../hooks/useRouterBack";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
 import nextI18nextConfig from "../../../next-i18next.config";
 import Utilities from "@/lib";
 import apiClient from "../../../helpers/APIClient";

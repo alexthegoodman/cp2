@@ -8,7 +8,7 @@ import useSWR from "swr";
 import InterestGrid from "../components/interests/InterestGrid/InterestGrid";
 import InterestPreview from "../components/interests/InterestPreview/InterestPreview";
 import PrimaryHeader from "../components/layout/PrimaryHeader/PrimaryHeader";
-import { useTranslation } from "next-i18next";
+import { useT as useTranslation } from "next-i18next/client";
 import FormMessage from "../components/fields/FormMessage/FormMessage";
 import apiClient from "../helpers/APIClient";
 
@@ -44,8 +44,6 @@ export const PopularInterests = ({
   const { t } = useTranslation();
   const [cookies, setCookie] = useCookies(["coUserToken", "coFavInt"]);
   const token = cookies.coUserToken;
-
-  const gqlClient = graphClient.setupClient(token);
 
   const { data } = useSWR("interestsKey", () =>
     getCategoriesAndInterestData(token)
@@ -308,7 +306,7 @@ export const InterestsContent = ({
 
 // TODO: remove "page" as actual page is unnecessary
 const Interests: NextPage = () => {
-  return <InterestsContent />;
+  return <InterestsContent onBack={null} onConfirm={() => console.info('confirm')} />;
 };
 
 export default Interests;
