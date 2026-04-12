@@ -26,6 +26,11 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 @media screen and (min-width: $desktopWidth) {
   .globalContainer {
     width: $desktopWidth;

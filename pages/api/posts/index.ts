@@ -37,6 +37,10 @@ export default async function handler(
             ...whereClause,
           },
           orderBy: { createdAt: "desc" },
+          include: {
+            creator: true,
+            interest: true,
+          },
           take: 1,
         });
       } else {

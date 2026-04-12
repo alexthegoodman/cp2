@@ -12,10 +12,13 @@ const ProfileLink: React.FC<ProfileLinkProps> = ({
   profileSEOStatement = "",
 }) => {
   const clickHandler = (e: MouseEvent) => onClick(e);
+
+  console.info("post", post)
+
   return (
     <>
       {post?.creator !== null ? (
-        <Link href={`/co/${post?.creator?.chosenUsername}`}>
+        <>
           <div className="contentAuthor">
             <div className="contentAuthorInner">
               <div className="authorProfileImage">
@@ -29,29 +32,19 @@ const ProfileLink: React.FC<ProfileLinkProps> = ({
                     height: 100,
                   }}
                 />
-                {/* <img
-                  alt={prrofileSEOStatement}
-                  title={prrofileSEOStatement}
-                  src={profileImageUrl}
-                /> */}
               </div>
               <div className="authorInformationWrapper">
                 <div className="authorInformation">
                   <span className="authorAttribution">
                     {post?.creator?.chosenUsername}
                   </span>
-                  {post?.creator?.posts?.length > 0 ? (
-                    <span className="authorCreationCount">
-                      {post?.creator?.posts?.length} Creations
-                    </span>
-                  ) : (
-                    <></>
-                  )}
+                  <Link className="profileLink" href={`/co/${post?.creator?.chosenUsername}`}>Visit Profile</Link>
+                  <a className="followLink" href="#">Follow</a>
                 </div>
               </div>
             </div>
           </div>
-        </Link>
+        </>
       ) : (
         <></>
       )}
