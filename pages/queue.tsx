@@ -93,7 +93,8 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
   console.info("favoriteInterest", favoriteInterest);
 
   const [selectedInterest, setSelectedInterest] = useState<any>(
-    favoriteInterest ? favoriteInterest : null
+    // favoriteInterest ? favoriteInterest : null // this inhibits discovery at early stages
+    null
   );
 
   const { data, mutate } = useSWR(

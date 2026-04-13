@@ -93,7 +93,16 @@ export const PopularInterests = ({
         />
         <section className="interestSelector">
           <div className="interestSelectorInner">
-            {/* <span className="title">Popular Interests</span> */}
+            
+            <a
+              href="#!"
+              className="actionLink"
+              onClick={() => selectInterest(null)}
+            >
+              <span>Clear Filter</span>
+            </a>
+
+            <span className="title">Select an Interest</span>
             <div className="interestList popularList">
               <div className="categorySection">
                 {data ? (
@@ -128,7 +137,7 @@ export const PopularInterests = ({
               href="#!"
               onClick={() => setShowAllInterests(!showAllInterests)}
             >
-              See All Interests
+              See More
             </a>
             {showAllInterests ? (
               <div className="interestList completeList">
@@ -162,6 +171,8 @@ export const PopularInterests = ({
               <></>
             )}
           </div>
+
+          
         </section>
       </div>
     </section>
