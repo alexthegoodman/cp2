@@ -52,10 +52,10 @@ const ThreadContent = () => {
   );
 
   const setReadBy = async () => {
-    if (!threadId) return;
+    if (!threadId || !data?.currentUser?.getUser?.generatedUsername) return;
     await apiClient.post("/records", {
       name: "readAt",
-      content: new Date().toISOString(),
+      content: data?.currentUser?.getUser?.generatedUsername,
       threadId,
     });
   };

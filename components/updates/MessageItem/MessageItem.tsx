@@ -45,6 +45,28 @@ const MessageItem: React.FC<MessageItemProps> = ({
     </div>
   );
 
+  const isImage = (url) => /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url?.toLowerCase());
+  const isVideo = (url) => /\.(mp4|webm|ogg|mov)$/.test(url?.toLowerCase());
+  const isAudio = (url) => /\.(mp3|wav|ogg|m4a)$/.test(url?.toLowerCase());
+
+  const getContentType = (url) => {
+    if (isImage(url)) return "image";
+    if (isVideo(url)) return "video";
+    if (isAudio(url)) return "audio";
+    return "text";
+  };
+
+  const attachmentContent = message?.attachmentUrl ? (
+    <div className={`attachmentWrapper ${authorSide}`}>
+      <ContentViewer
+        type={getContentType(message.attachmentUrl)}
+        preview={message.attachmentUrl}
+        content={message.attachmentUrl}
+        mini={true}
+      />
+    </div>
+  ) : null;
+
   return (
     <div
       className={`messageItem ${message?.type} ${
@@ -66,6 +88,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
       ) : (
         <></>
       )}
+      {attachmentContent}
       <div className="messageItemInner">
         {authorSide === "left" ? authorAttribution : <></>}
         <div className={`itemContent ${authorSide}`}>

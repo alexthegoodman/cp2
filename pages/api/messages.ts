@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../lib/prisma";
 import { verifyToken } from "../../lib/auth";
+import VBlob from "../../lib/VBlob";
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,16 +16,46 @@ export default async function handler(
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const { content, threadId } = req.body;
+  const {
+    content,
+    threadId,
+    attachmentUrl,
+    fileData,
+    fileName,
+    fileType,
+    fileSize,
+  } = req.body;
+
+  let finalAttachmentUrl = attachmentUrl;
+
+  if (fileData && fileName && !finalAttachmentUrl) {
+    const vblob = new VBlob();
+    let contentType = "image";
+    if (fileType?.includes("video")) contentType = "video";
+    if (fileType?.includes("audio")) contentType = "audio";
+
+    try {
+      finalAttachmentUrl = await vblob.uploadAsset(
+        contentType,
+        fileName,
+        fileType,
+        fileSize,
+        fileData
+      );
+    } catch (uploadError) {
+      console.error("Upload error in messages API:", uploadError);
+    }
+  }
 
   try {
     const message = await prisma.message.create({
       data: {
         type: "reply",
-        content: content,
+        content: content || "",
         userId: currentUser.id,
-        threadId: threadId
-      }
+        threadId: threadId,
+        attachmentUrl: finalAttachmentUrl,
+      },
     });
 
     return res.status(201).json(message);

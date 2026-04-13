@@ -1,11 +1,48 @@
 /** Variables **/
+@import "./variables";
 
 /** Component Imports **/
 @import "../components/updates/UpdateItem/UpdateItem";
 @import "../components/growth/InviteFriends/InviteFriends";
 
 /** Page Styles **/
+.updatesFilters {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 25px;
+  background: white;
+  border-bottom: 1px #e5e5e5 solid;
+
+  .filterButton {
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: grey;
+    margin-right: 20px;
+    cursor: pointer;
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+
+    &.active {
+      color: black;
+      font-weight: bold;
+      border-bottom: 2px black solid;
+    }
+
+    .unreadCount {
+      background: $red;
+      color: white;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      margin-left: 5px;
+      font-weight: normal;
+    }
+  }
+}
+
 .updatesContainer {
   padding: 0;
-  border-top: 1px #e5e5e5 solid;
+  // border-top: 1px #e5e5e5 solid; // Removed since filters have border-bottom
 }

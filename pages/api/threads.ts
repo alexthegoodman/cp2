@@ -34,7 +34,8 @@ export default async function handler(
         messages: {
           take: 1,
           orderBy: { createdAt: "desc" }
-        }
+        },
+        readHistory: true
       },
       orderBy: { createdAt: "desc" }
     });

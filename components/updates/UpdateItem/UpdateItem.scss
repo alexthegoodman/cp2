@@ -45,22 +45,37 @@
       width: calc(100% - 50px);
       position: relative;
 
+      .itemHeader {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2px;
+        width: 90%;
+      }
+
       .itemLabel {
-        font-size: 20px;
-        margin-bottom: 7px;
+        font-size: 18px;
+        margin-bottom: 0px;
         overflow: hidden;
         white-space: nowrap;
         width: 90%;
         text-overflow: ellipsis;
+        color: black;
       }
       .itemAttribution {
         font-size: 14px;
-        color: grey;
+        color: black;
+        font-weight: bold;
 
         overflow: hidden;
         white-space: nowrap;
-        width: 75%;
+        width: 70%;
         text-overflow: ellipsis;
+      }
+      .itemTimestamp {
+        font-size: 12px;
+        color: grey;
       }
       .itemColor {
         position: absolute;

@@ -19,19 +19,85 @@
         margin: 25px 0;
 
         border-radius: 10px;
+        position: relative;
 
         .formTextarea {
           textarea {
             font-size: 16px;
             line-height: 24px;
             padding: 25px;
+            padding-bottom: 60px;
             height: 155px;
             margin: 0;
             align-items: flex-start;
           }
         }
+
+        .contentActions {
+          position: absolute;
+          bottom: 14px;
+          left: 7px;
+          right: 7px;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+
+          .actionButton {
+            background: none;
+            border: none;
+            background: $frenchRaspberry;
+            color: white;
+            border-radius: 50%;
+            font-size: 28px;
+            line-height: 20px;
+            height: 40px;
+            width: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+
+        .emojiPickerWrapper {
+          position: absolute;
+          bottom: 100%;
+          left: 0;
+          z-index: 100;
+        }
       }
     }
+
+    .filePreview {
+      background: #f0f0f0;
+      padding: 10px 15px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+
+      .fileName {
+        font-size: 14px;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 80%;
+      }
+
+      .removeFile {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #ff4040;
+      }
+    }
+
     .dictatorControls {
       display: flex;
       flex-direction: row;

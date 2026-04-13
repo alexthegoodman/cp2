@@ -2,5 +2,9 @@
   "title": "Updates",
   "threadTitle": "Chat with {{username}}",
   "inviteFriends": "Invite Friends!",
-  "typeReply": "Type your reply here..."
+  "typeReply": "Type your reply here...",
+  "filters": {
+    "all": "All",
+    "unread": "Unread"
+  }
 }

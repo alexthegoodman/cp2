@@ -17,6 +17,8 @@ import nextI18NextConfig from "../../next-i18next.config.js";
 import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import apiClient from "../../helpers/APIClient";
 
+import { useState } from "react";
+
 const getUserThreadData = async (token) => {
   apiClient.setupClient(token);
 
@@ -33,6 +35,7 @@ const UpdatesContent: NextPage = () => {
   const { t } = useTranslation();
   const [cookies] = useCookies(["coUserToken"]);
   const token = cookies.coUserToken;
+  const [filter, setFilter] = useState("all");
 
   const { data } = useSWR("updatesKey", () => getUserThreadData(token), {
     revalidateIfStale: true,
@@ -42,6 +45,13 @@ const UpdatesContent: NextPage = () => {
     data?.getUserThreads,
     data?.getUser?.generatedUsername
   );
+
+  const filteredThreads =
+    filter === "unread"
+      ? data?.getUserThreads?.filter((thread) =>
+          unreadThreads.some((unread) => unread.id === thread.id)
+        )
+      : data?.getUserThreads;
 
   // console.info("UpdatesContent", data);
 
@@ -63,9 +73,26 @@ const UpdatesContent: NextPage = () => {
           rightIcon={<></>}
         />
         <InviteFriends />
+        <div className="updatesFilters">
+          <button
+            className={`filterButton ${filter === "all" ? "active" : ""}`}
+            onClick={() => setFilter("all")}
+          >
+            {t("updates:filters.all")}
+          </button>
+          <button
+            className={`filterButton ${filter === "unread" ? "active" : ""}`}
+            onClick={() => setFilter("unread")}
+          >
+            {t("updates:filters.unread")}
+            {unreadThreadCount > 0 && (
+              <span className="unreadCount">{unreadThreadCount}</span>
+            )}
+          </button>
+        </div>
         <div className="scrollContainer updatesContainer">
-          {data?.getUserThreads?.length > 0 ? (
-            data?.getUserThreads?.map((thread, i) => {
+          {filteredThreads?.length > 0 ? (
+            filteredThreads?.map((thread, i) => {
               const previewMessage = thread.messages[0];
 
               const match = unreadThreads.find(
@@ -79,6 +106,7 @@ const UpdatesContent: NextPage = () => {
                   label={previewMessage.content}
                   author={previewMessage?.user}
                   isRead={match ? false : true}
+                  createdAt={previewMessage?.createdAt}
                 />
               );
             })

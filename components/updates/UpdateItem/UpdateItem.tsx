@@ -14,6 +14,7 @@ const UpdateItem: React.FC<UpdateItemProps> = ({
   label = "",
   author = null,
   isRead = false,
+  createdAt = "",
 }) => {
   const router = useRouter();
   const goToThead = (e) => {
@@ -28,6 +29,15 @@ const UpdateItem: React.FC<UpdateItemProps> = ({
     height: 100,
   });
 
+  const formattedDate = createdAt
+    ? new Intl.DateTimeFormat("default", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      }).format(new Date(createdAt))
+    : "";
+
   return (
     <a
       href="#!"
@@ -40,12 +50,15 @@ const UpdateItem: React.FC<UpdateItemProps> = ({
           <img src={profileImageUrl} />
         </div>
         <div className="itemInformation">
+          <div className="itemHeader">
+            {author !== null ? (
+              <span className="itemAttribution">{author?.chosenUsername}</span>
+            ) : (
+              <></>
+            )}
+            <span className="itemTimestamp">{formattedDate}</span>
+          </div>
           <span className="itemLabel">{label}</span>
-          {author !== null ? (
-            <span className="itemAttribution">by {author?.chosenUsername}</span>
-          ) : (
-            <></>
-          )}
           {isRead ? (
             <div className="itemColor colorGrey"></div>
           ) : (
