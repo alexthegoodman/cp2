@@ -50,6 +50,8 @@ const UpdateItem: React.FC<UpdateItemProps> = ({
           <img src={profileImageUrl} />
         </div>
         <div className="itemInformation">
+          
+          <span className="itemLabel">{label}</span>
           <div className="itemHeader">
             {author !== null ? (
               <span className="itemAttribution">{author?.chosenUsername}</span>
@@ -58,7 +60,6 @@ const UpdateItem: React.FC<UpdateItemProps> = ({
             )}
             <span className="itemTimestamp">{formattedDate}</span>
           </div>
-          <span className="itemLabel">{label}</span>
           {isRead ? (
             <div className="itemColor colorGrey"></div>
           ) : (

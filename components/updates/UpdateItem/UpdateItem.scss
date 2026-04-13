@@ -47,10 +47,11 @@
 
       .itemHeader {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2px;
+        align-items: flex-start;
+        margin-top: 4px;
+        gap: 4px;
         width: 90%;
       }
 
@@ -62,11 +63,13 @@
         width: 90%;
         text-overflow: ellipsis;
         color: black;
+        display: block;
       }
       .itemAttribution {
         font-size: 14px;
         color: black;
         font-weight: bold;
+        display: block;
 
         overflow: hidden;
         white-space: nowrap;
@@ -76,6 +79,7 @@
       .itemTimestamp {
         font-size: 12px;
         color: grey;
+        display: block;
       }
       .itemColor {
         position: absolute;

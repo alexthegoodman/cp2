@@ -33,7 +33,10 @@ export default async function handler(
         },
         messages: {
           take: 1,
-          orderBy: { createdAt: "desc" }
+          orderBy: { createdAt: "desc" },
+          include: {
+            user: true
+          }
         },
         readHistory: true
       },
