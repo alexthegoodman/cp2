@@ -6,5 +6,7 @@ module.exports = {
     // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
     locales: ["en", "bn"],
   },
-  localePath: "./public/locales",
+  localePath: typeof window === 'undefined'
+      ? require('path').resolve('./public/locales')
+      : '/locales',
 };
