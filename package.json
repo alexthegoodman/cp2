@@ -17,6 +17,7 @@
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "@types/luxon": "^3.7.1",
+    "@vercel/blob": "^2.3.3",
     "bcryptjs": "^2.4.3",
     "dotenv": "^17.4.2",
     "framer-motion": "^12.38.0",

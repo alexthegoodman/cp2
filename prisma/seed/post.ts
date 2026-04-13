@@ -3,15 +3,15 @@ import { faker } from "@faker-js/faker";
 import slugify from "slugify";
 import { nanoid } from "nanoid";
 
-export const cloudfrontUrl = "https://d3ubks77jdbtp7.cloudfront.net";
+// export const cloudfrontUrl = "https://d3ubks77jdbtp7.cloudfront.net";
 
 export const testImages = [
-  "2022/09/painting2-kQSyfRpjrn.jpg",
-  "2022/09/painting1-LLoc8uvOLy.jpg",
-  "2022/09/drawing2-kDyehrpfOB.jpg",
-  "2022/09/drawing1-1Mdb4o6vu5.jpg",
-  "2022/09/sports2-yuxXQHCuf_.jpg",
-  "2022/09/sports1-HLXSpjv8hn.jpg",
+  "https://zg8kcksribtynhwp.public.blob.vercel-storage.com/adrianna-geo-1rBg5YSi00c-unsplash.jpg",
+  "https://zg8kcksribtynhwp.public.blob.vercel-storage.com/boston-public-library-YoK5pBcSY8s-unsplash.jpg",
+  "https://zg8kcksribtynhwp.public.blob.vercel-storage.com/dan-farrell-fT49QnFucQ8-unsplash.jpg",
+  "https://zg8kcksribtynhwp.public.blob.vercel-storage.com/adrianna-geo-1rBg5YSi00c-unsplash.jpg",
+  "https://zg8kcksribtynhwp.public.blob.vercel-storage.com/boston-public-library-YoK5pBcSY8s-unsplash.jpg",
+  "https://zg8kcksribtynhwp.public.blob.vercel-storage.com/dan-farrell-fT49QnFucQ8-unsplash.jpg",
 ];
 
 export default async function seedPosts(users, interests) {
@@ -36,7 +36,7 @@ export default async function seedPosts(users, interests) {
         contentType: "video",
         contentPreview: "",
         generatedTitleSlug: slugify("Chinese Stir Fry") + nanoid(),
-        content: "2022/09/Chinese - 11700-h-faAYfQRj.mp4",
+        content: "https://zg8kcksribtynhwp.public.blob.vercel-storage.com/cheetah.mp4",
         interestId: interests.filter(
           (interest) => interest.name === "Chinese"
         )[0].id,
@@ -59,10 +59,10 @@ export default async function seedPosts(users, interests) {
         description:
           "My work explores the relationship between Critical theory and UFO sightings.",
         contentType: "audio",
-        contentPreview: "2022/09/music1-Hdz1r_1-QH.jpg",
+        contentPreview: "https://zg8kcksribtynhwp.public.blob.vercel-storage.com/cheetahPoster.jpeg",
         generatedTitleSlug: slugify("Tuesday (GlitchSoftHip-hop)") + nanoid(),
         content:
-          "2022/09/Tuesday-(GlitchSoftHip-hop)-amaksi-pixabay-HIlQb3bzGW.mp3",
+          "https://zg8kcksribtynhwp.public.blob.vercel-storage.com/cheetah.mp3",
         interestId: interests.filter(
           (interest) => interest.name === "Electronic"
         )[0].id,
@@ -87,7 +87,7 @@ export default async function seedPosts(users, interests) {
         contentType: "video",
         contentPreview: "",
         generatedTitleSlug: slugify("Chop Master!") + nanoid(),
-        content: "2022/09/Chop - 11638-f7vKlmN_8v.mp4",
+        content: "https://zg8kcksribtynhwp.public.blob.vercel-storage.com/cheetah.mp4",
         interestId: interests.filter(
           (interest) => interest.name === "Cooking"
         )[0].id,
@@ -110,10 +110,10 @@ export default async function seedPosts(users, interests) {
         description:
           "As momentary derivatives become clarified through emergent and repetitive practice, the viewer is left with a testament to the darkness of our existence.",
         contentType: "audio",
-        contentPreview: "2022/09/music2-pyPLFtD0mN.jpg",
+        contentPreview: "https://zg8kcksribtynhwp.public.blob.vercel-storage.com/cheetahPoster.jpeg",
         generatedTitleSlug: slugify("audio #2") + nanoid(),
         content:
-          "2022/09/Leonell-Cassio-TheBlackestBouquet-LeonellCassio-pixabay-7i7XmfbUVN.mp3",
+          "https://zg8kcksribtynhwp.public.blob.vercel-storage.com/cheetah.mp3",
         interestId: interests.filter(
           (interest) => interest.name === "Electronic"
         )[0].id,

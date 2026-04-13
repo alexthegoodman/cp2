@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../../lib/prisma";
 import Utilities from "../../lib";
 import { verifyToken } from "../../lib/auth";
-import AWS from "../../lib/AWS";
+import VBlob from "@/lib/VBlob";
 
 const utilities = new Utilities();
 
@@ -95,11 +95,11 @@ export default async function handler(
         coverImageData,
       } = req.body;
 
-      const aws = new AWS();
+      const vblob = new VBlob();
       let addtData: any = {};
 
       if (profileImageName && profileImageData) {
-        addtData.profileImage = await aws.uploadAsset(
+        addtData.profileImage = await vblob.uploadAsset(
           "image",
           profileImageName,
           profileImageType,
@@ -109,7 +109,7 @@ export default async function handler(
       }
 
       if (coverImageName && coverImageData) {
-        addtData.coverImage = await aws.uploadAsset(
+        addtData.coverImage = await vblob.uploadAsset(
           "image",
           coverImageName,
           coverImageType,

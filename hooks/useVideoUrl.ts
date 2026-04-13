@@ -1,4 +1,4 @@
-import { s3Url } from "../def/urls";
+// import { s3Url } from "../def/urls";
 
 export const useVideoUrl = (sourceUrl = "") => {
   //   const [json, setJson] = useState(null);
@@ -20,7 +20,7 @@ export const useVideoUrl = (sourceUrl = "") => {
 
   // const requestData = Buffer.from(videoRequest).toString("base64");
 
-  const videoUrl = `${s3Url}${sourceUrl}`;
+  const videoUrl = `${sourceUrl}`;
 
   return {
     videoUrl,

@@ -1,4 +1,4 @@
-import { s3Url } from "../def/urls";
+// import { s3Url } from "../def/urls";
 
 export const useAudioUrl = (sourceUrl = "") => {
   //   const [json, setJson] = useState(null);
@@ -20,7 +20,7 @@ export const useAudioUrl = (sourceUrl = "") => {
 
   // const requestData = Buffer.from(audioRequest).toString("base64");
 
-  const audioUrl = `${s3Url}${sourceUrl}`;
+  const audioUrl = `${sourceUrl}`;
 
   // console.info("sourceUrl", audioUrl);
 

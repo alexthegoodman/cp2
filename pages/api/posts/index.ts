@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import { verifyToken } from "../../../lib/auth";
-import AWS from "../../../lib/AWS";
 import Utilities from "../../../lib";
+import VBlob from "@/lib/VBlob";
 
 const utilities = new Utilities();
 
@@ -98,15 +98,15 @@ export default async function handler(
         });
       }
 
-      const aws = new AWS();
-      let upload1Path = "";
+      const vblob = new VBlob();
+      let upload1Path: any = "";
       if (file1Name && file1Data) {
-        upload1Path = await aws.uploadAsset(contentType, file1Name, file1Type, file1Size, file1Data);
+        upload1Path = await vblob.uploadAsset(contentType, file1Name, file1Type, file1Size, file1Data);
       }
 
-      let upload2Path = "";
+      let upload2Path: any = "";
       if (file2Name && file2Data) {
-        upload2Path = await aws.uploadAsset("image", file2Name, file2Type, file2Size, file2Data);
+        upload2Path = await vblob.uploadAsset("image", file2Name, file2Type, file2Size, file2Data);
       }
 
       const generatedTitleSlug = utilities.helpers.slugify(title);
