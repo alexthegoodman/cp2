@@ -32,11 +32,17 @@ import { useRouter } from "next/router";
 import Masonry from "react-responsive-masonry";
 import useInfiniteScroll from "react-infinite-scroll-hook";
 import apiClient from "../helpers/APIClient";
+import ImpressionWheel from "@/components/queue/ImpressionWheel/ImpressionWheel";
+import ImpressionWheel2 from "@/components/queue/ImpressionWheel/ImpressionWheel2";
 
 const getPostsAndUserData = async (token, interestId = null) => {
+
+  let userData = null;
+  if (token) {
   apiClient.setupClient(token);
 
-  const userData = await apiClient.get("/user");
+  userData = await apiClient.get("/user");
+  }
 
   console.info("getPostsAndUserData interestId", interestId);
 
@@ -50,7 +56,10 @@ const getPostsAndUserData = async (token, interestId = null) => {
     page: 1,
   });
 
-  const userThreadData = await apiClient.get("/threads");
+  let userThreadData = null;
+  if (token) {
+  userThreadData = await apiClient.get("/threads");
+  }
 
   const categoriesAndInterestsData = await apiClient.get("/interests");
 
@@ -120,10 +129,10 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
   const [currentImpression, setCurrentImpression] = useState("");
   const [showInterestsModal, setShowInterestsModal] = useState(false);
   const [showLanguageModal, setShowLanguageModal] = useState(
-    !coUserLng ? true : false
+    !coUserLng && token ? true : false
   );
   const [showFavoriteInterestModal, setShowFavoriteInterestModal] = useState(
-    !coFavInt ? true : false
+    !coFavInt && token ? true : false
   );
   const [creditUi, setCreditUi] = useState(data?.currentUser?.credit);
   const [impressionsEnabled, setImpressionsEnabled] = useState(true);
@@ -217,11 +226,12 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
       y: -5,
       // transition: { delay: i * 1.5 - 1 },
     }));
-    postAnimation.set((i) => ({
-      opacity: 0,
-      y: 5,
-      // transition: { delay: i * 1.5 - 1 },
-    }));
+
+    // postAnimation.set((i) => ({
+    //   opacity: 0,
+    //   y: 5,
+    //   // transition: { delay: i * 1.5 - 1 },
+    // }));
 
     postAnimation.start((i) => ({
       opacity: 1,
@@ -524,7 +534,7 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
                     <motion.div
                       custom={0}
                       animate={postAnimation}
-                      initial={{ opacity: 0, y: -15 }}
+                      // initial={{ opacity: 0, y: -15 }}
                     >
                       <ContentViewer
                         type={currentPost?.contentType}
@@ -535,7 +545,7 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
                     <motion.div
                       custom={1}
                       animate={postAnimation}
-                      initial={{ opacity: 0, y: -15 }}
+                      // initial={{ opacity: 0, y: -15 }}
                     >
                       <ContentInformation queue={true} post={currentPost} />
                     </motion.div>
@@ -551,6 +561,8 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
                 creditCount={creditUi}
                 onClick={impressionClickHandler}
               />
+              {/* <ImpressionWheel /> */}
+              {/* <ImpressionWheel2 /> */}
             </motion.div>
             <motion.div
               animate={exploreAnimation}
@@ -571,7 +583,7 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
               </Masonry>
               <div className="sentry" ref={sentryRef}></div>
             </motion.div>
-            {/* <ImpressionWheel /> */}
+            
           </div>
           {currentView !== "explore" && currentImpression !== "" ? (
             <motion.div
@@ -625,14 +637,15 @@ export async function getServerSideProps(context) {
   const cookieData = utilities.helpers.parseCookie(context.req.headers.cookie);
   const token = cookieData.coUserToken;
 
-  if (!token) {
-    return {
-      redirect: {
-        destination: "/sign-in",
-        permanent: false,
-      },
-    };
-  }
+  // would rather prompt to login after interaction, but we will keep landing pages too, maybe have a modal or alert
+  // if (!token) {
+  //   return {
+  //     redirect: {
+  //       destination: "/sign-in",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   const favoriteInterestId =
     typeof cookieData.coFavInt !== "undefined" ? cookieData.coFavInt : null;

@@ -28,6 +28,9 @@ export default async function clean() {
   await prisma.thread.deleteMany({
     where: { id: { not: "" } },
   });
+  await prisma.favorite.deleteMany({
+    where: { id: { not: "" } },
+  });
   await prisma.post.deleteMany({
     where: { id: { not: "" } },
   });

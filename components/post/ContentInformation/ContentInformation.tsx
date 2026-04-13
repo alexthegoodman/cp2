@@ -53,6 +53,11 @@ const ContentInformation: React.FC<ContentInformationProps> = ({
 
         <div className="contentMetaData">
           {post?.description ? (
+            <p className="contentDescription">0 Views</p>
+          ) : (
+            <></>
+          )}
+          {post?.description ? (
             <p className="contentDescription">{post?.description}</p>
           ) : (
             <></>

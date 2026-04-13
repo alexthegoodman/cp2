@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import impressions from "@/lib/def/impressions";
 import FormTextarea from "../../fields/FormTextarea/FormTextarea";
 import CreditCounter from "../CreditCounter/CreditCounter";
+import tinycolor from "tinycolor2";
 
 import { ImpressionGridProps } from "./ImpressionGrid.d";
 
@@ -117,6 +118,16 @@ const ImpressionGrid: React.FC<ImpressionGridProps> = ({
                 selectedCategory === "all"
               ) {
                 return category.list.map((impression, i) => {
+                  // const baseColor = impression.color;
+
+                  // // Create a very light, desaturated version of the color for the background
+                  // const bgColor = tinycolor(baseColor).darken(50).desaturate(20).toRgbString();
+
+                  // // Ensure the text itself is dark enough to be readable against that light background
+                  // const textColor = tinycolor(bgColor).isDark() 
+                  //   ? tinycolor(baseColor).lighten(30).toRgbString() 
+                  //   : baseColor;
+
                   return (
                     <li key={`impressionGridItem${x}${i}`}>
                       <a
@@ -128,6 +139,7 @@ const ImpressionGrid: React.FC<ImpressionGridProps> = ({
                         aria-label={impression.content}
                         tabIndex={5}
                         // style={{ backgroundColor: impression.color }}
+                        // style={{ color: textColor, backgroundColor: bgColor, fontWeight: "600" }}
                       >
                         {t(`impressions:dictionary.${impression.content}`)}
                         {/* <i
