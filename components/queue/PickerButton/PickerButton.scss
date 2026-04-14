@@ -1,18 +1,38 @@
 .pickerButton {
   font-weight: 600;
-  font-size: 14px;
+  // font-size: 14px;
+  font-size: 13px;
   text-decoration: none;
   color: black;
-  background: $headerWhite;
-  padding: 7px 12px;
+  
+  // padding: 7px 12px;
+  padding: 5px 9px;
   display: block;
   border-radius: 50px;
   text-transform: capitalize;
 
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+
+  opacity: 0.8;
+  background: rgba(224, 208, 208, 0.8);
+
   filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.2));
 
-  .typcn {
-    font-size: 16px;
-    margin-right: 4px;
+  // .typcn {
+  //   font-size: 16px;
+  //   margin-right: 4px;
+  // }
+
+  &.selected {
+    opacity: 1.0;
+    background: $headerWhite;
   }
+}
+
+.pickerContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
 }

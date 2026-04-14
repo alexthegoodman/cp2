@@ -26,7 +26,7 @@ import nextI18NextConfig from "../next-i18next.config.js";
 import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import LanguagePicker from "../components/queue/LanguagePicker/LanguagePicker";
 import ImpressionTicker from "../components/post/ImpressionTicker/ImpressionTicker";
-import PickerButton from "../components/queue/PickerButton/PickerButton";
+import PickerButton, { SelectedFeed } from "../components/queue/PickerButton/PickerButton";
 import ViewSwitcher from "../components/queue/ViewSwitcher/ViewSwitcher";
 import { useRouter } from "next/router";
 import Masonry from "react-responsive-masonry";
@@ -515,6 +515,10 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
               titleComponent={
                 <PickerButton
                   onSelectInterestClick={onSelectInterestClick}
+                  onSelectFollowingFeedClick={() => {
+                    console.info("Need to setup following feed");
+                  }}
+                  selectedFeed={SelectedFeed.Interests}
                   selectedInterest={selectedInterest}
                 />
               }
