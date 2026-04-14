@@ -483,6 +483,7 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
 
               location.reload();
             }}
+            showClear={false}
           />
         </section>
       ) : (

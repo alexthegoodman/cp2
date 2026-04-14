@@ -36,10 +36,12 @@ export const PopularInterests = ({
   title = "",
   onBack,
   onConfirm = (cat, int) => console.info("confirm", cat, int),
+  showClear = true
 }: {
   title: string;
   onBack?: () => void;
   onConfirm: (cat, int) => void;
+  showClear?: boolean;
 }) => {
   const { t } = useTranslation();
   const [cookies, setCookie] = useCookies(["coUserToken", "coFavInt"]);
@@ -94,13 +96,15 @@ export const PopularInterests = ({
         <section className="interestSelector">
           <div className="interestSelectorInner">
             
-            <a
-              href="#!"
-              className="actionLink"
-              onClick={() => selectInterest(null)}
-            >
-              <span>Clear Filter</span>
-            </a>
+            {showClear ? (
+              <a
+                href="#!"
+                className="actionLink"
+                onClick={() => selectInterest(null)}
+              >
+                <span>Clear Filter</span>
+              </a>
+            ) : <></>}
 
             <span className="title">Select an Interest</span>
             <div className="interestList popularList">
