@@ -670,9 +670,9 @@ export async function getServerSideProps(context) {
   )[0];
   const interest =
     typeof category !== "undefined"
-      ? category.interests ? category.interests.filter(
+      && category.interests ? category.interests.filter(
           (interest) => interest.id === favoriteInterestId
-        )[0] : null
+        )[0]
       : null;
 
   const locale =
