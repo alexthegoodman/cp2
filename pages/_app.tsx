@@ -10,6 +10,7 @@ import nextI18NextConfig from "../next-i18next.config.js";
 import { CookiesProvider, useCookies } from "react-cookie";
 import apiClient from "../helpers/APIClient";
 import { GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
+import { Analytics } from '@vercel/analytics/next';
 
 import "../styles/globals.scss";
 
@@ -109,6 +110,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Script async defer src="https://connect.facebook.net/en_US/sdk.js" />
       
       <Component {...pageProps} />
+
+      <Analytics />
       
       {/* </section> */}
     </>
