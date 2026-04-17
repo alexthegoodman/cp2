@@ -18,12 +18,9 @@ Remaining Items (not necessary for launch):
 - Follow each other
 - Following Feed + All Interests Feed
 - Browse Saved Favorite Posts
-- A few category filters for Inbox (unread, new followers)
-- Show date and sender in Inbox thread previews
-- Add emojis and attachments in Inbox threads
 - Maybe add Other Posts by this creator section on each post to encourage follows
 - Volume control on videos? Stylized media player?
-- Test larger uploads on production
+- Test larger uploads on production (may need Vercel Blob client side upload)
 - Analytics
 
 Future (after launch)
@@ -31,3 +28,4 @@ Future (after launch)
 - Jobs
 - Shops
 - Search
+- Support this Creator (sponsor / donate)
