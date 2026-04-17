@@ -66,7 +66,7 @@ export const PopularInterests = ({
 
   const selectInterest = async (interestId) => {
     const displayCategory = data?.getCategories?.filter((category, i) => {
-      return category.interests.filter((interest, i) => {
+      return category?.interests?.filter((interest, i) => {
         return interest.id === interestId;
       })[0];
     })[0];

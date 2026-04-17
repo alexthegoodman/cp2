@@ -664,15 +664,15 @@ export async function getServerSideProps(context) {
 
   const category = returnData.categoriesAndInterestsData.getCategories.filter(
     (category) =>
-      category.interests.filter(
+      category.interests ? category.interests.filter(
         (interest) => interest.id === favoriteInterestId
-      )[0]
+      )[0] : null
   )[0];
   const interest =
     typeof category !== "undefined"
-      ? category.interests.filter(
+      ? category.interests ? category.interests.filter(
           (interest) => interest.id === favoriteInterestId
-        )[0]
+        )[0] : null
       : null;
 
   const locale =
