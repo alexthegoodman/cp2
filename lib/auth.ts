@@ -8,7 +8,17 @@ export const verifyToken = async (req) => {
 
   try {
     const tokenHeader = req.headers[tokenHeaderKey.toLowerCase()];
-    const token = Array.isArray(tokenHeader) ? tokenHeader[0]?.split("Bearer ")[1] : tokenHeader?.split("Bearer ")[1];
+    let token = Array.isArray(tokenHeader) ? tokenHeader[0]?.split("Bearer ")[1] : tokenHeader?.split("Bearer ")[1];
+
+    if (!token && req.headers.cookie) {
+      // Fallback to cookie
+      const cookies = req.headers.cookie.split(";").reduce((acc, cookie) => {
+        const [key, value] = cookie.trim().split("=");
+        acc[key] = value;
+        return acc;
+      }, {});
+      token = cookies["coUserToken"];
+    }
 
     if (token) {
       const verified = jwt.verify(token, jwtSecretKey) as any;

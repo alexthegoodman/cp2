@@ -76,10 +76,12 @@ export default async function handler(
         file1Size,
         file1Type,
         file1Data,
+        file1Url,
         file2Name,
         file2Size,
         file2Type,
         file2Data,
+        file2Url,
       } = req.body;
 
       const interest = await prisma.interest.findUnique({
@@ -99,13 +101,13 @@ export default async function handler(
       }
 
       const vblob = new VBlob();
-      let upload1Path: any = "";
-      if (file1Name && file1Data) {
+      let upload1Path: any = file1Url || "";
+      if (!upload1Path && file1Name && file1Data) {
         upload1Path = await vblob.uploadAsset(contentType, file1Name, file1Type, file1Size, file1Data);
       }
 
-      let upload2Path: any = "";
-      if (file2Name && file2Data) {
+      let upload2Path: any = file2Url || "";
+      if (!upload2Path && file2Name && file2Data) {
         upload2Path = await vblob.uploadAsset("image", file2Name, file2Type, file2Size, file2Data);
       }
 

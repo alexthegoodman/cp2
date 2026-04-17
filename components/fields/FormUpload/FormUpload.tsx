@@ -45,6 +45,11 @@ const FormUpload: React.FC<FormUploadProps> = ({
     reader.readAsDataURL(file);
   };
 
+  const { onChange: onRegisterChange, ...registerProps } = register(
+    fieldProps.name,
+    validation
+  );
+
   return (
     <div className="formUpload">
       {fieldProps.placeholder !== "" ? (
@@ -55,8 +60,11 @@ const FormUpload: React.FC<FormUploadProps> = ({
       <input
         type="file"
         {...fieldProps}
-        {...register(fieldProps.name, validation)}
-        onChange={onFileInputChange}
+        {...registerProps}
+        onChange={(e) => {
+          onRegisterChange(e);
+          onFileInputChange(e);
+        }}
       />
       <SimpleErrorMessage errors={errors} fieldProps={fieldProps} />
     </div>

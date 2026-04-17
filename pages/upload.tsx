@@ -20,6 +20,7 @@ import nextI18NextConfig from "../next-i18next.config.js";
 import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import apiClient from "../helpers/APIClient";
 import MixpanelBrowser from "../helpers/MixpanelBrowser";
+import { upload } from "@vercel/blob/client";
 
 const getUserData = async (token) => {
   apiClient.setupClient(token);
@@ -63,10 +64,36 @@ const UploadContent = () => {
     setSubmitLoading(true);
 
     try {
+      // Client-side upload to Vercel Blob
+      let file1Url = "";
+      if (formValues.file1 && formValues.file1.length > 0) {
+        const file = formValues.file1[0];
+        const blob = await upload(file.name, file, {
+          access: "public",
+          handleUploadUrl: "/api/upload",
+        });
+        file1Url = blob.url;
+      }
+
+      let file2Url = "";
+      if (formValues.file2 && formValues.file2.length > 0) {
+        const file = formValues.file2[0];
+        const blob = await upload(file.name, file, {
+          access: "public",
+          handleUploadUrl: "/api/upload",
+        });
+        file2Url = blob.url;
+      }
+
+      // Remove large base64 data before sending to API
+      const { file1Data, file2Data, ...cleanedFormValues } = formValues;
+
       const createdPost = await apiClient.post("/posts", {
         interestId: selectedInterest?.id,
         contentType,
-        ...formValues,
+        ...cleanedFormValues,
+        file1Url,
+        file2Url,
       });
 
       setSubmitLoading(false);
