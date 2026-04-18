@@ -91,7 +91,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       {/* <section className="globalContainer"> */}
       <GoogleAnalytics />
-      {/* <Head> */}
+      <Head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="CommonPlace" />
+        <link rel="apple-touch-icon" href="/logoMini.png" />
         {/* <link rel="stylesheet" href="/globals.min.css" /> */}
         {/** Meta Pixel */}
         {/* <noscript>
@@ -102,7 +108,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             src="https://www.facebook.com/tr?id=606669884534740&ev=PageView&noscript=1"
           />
         </noscript> */}
-      {/* </Head> */}
+      </Head>
       {/** TODO: strategy="afterInteractive" ? */}
       <Script dangerouslySetInnerHTML={{ __html: initializeHotjar }} />
       <Script dangerouslySetInnerHTML={{ __html: initializeFacebookSDK }} />

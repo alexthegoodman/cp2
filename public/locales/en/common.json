@@ -22,5 +22,12 @@
     "video": "Video",
     "audio": "Audio",
     "text": "Text"
+  },
+  "pwa": {
+    "installTitle": "Add to Home Screen",
+    "installDescription": "Get the best experience by adding CommonPlace to your home screen. It works just like an app!",
+    "installButton": "Add to Home Screen",
+    "continueButton": "Continue",
+    "notNow": "Not Now"
   }
 }

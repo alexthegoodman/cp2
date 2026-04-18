@@ -34,6 +34,7 @@ import useInfiniteScroll from "react-infinite-scroll-hook";
 import apiClient from "../helpers/APIClient";
 import ImpressionWheel from "@/components/queue/ImpressionWheel/ImpressionWheel";
 import ImpressionWheel2 from "@/components/queue/ImpressionWheel/ImpressionWheel2";
+import InstallPWA from "@/components/growth/InstallPWA/InstallPWA";
 
 const getPostsAndUserData = async (token, interestId = null) => {
 
@@ -85,7 +86,7 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const { cache } = useSWRConfig();
-  const [cookies, setCookie] = useCookies(["coUserToken", "coFavInt"]);
+  const [cookies, setCookie] = useCookies(["coUserToken", "coFavInt", "coPWA"]);
   const token = cookies.coUserToken;
 
   apiClient.setupClient(token);
@@ -134,6 +135,9 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
   );
   const [showFavoriteInterestModal, setShowFavoriteInterestModal] = useState(
     !coFavInt && token ? true : false
+  );
+  const [showInstallPWAModal, setShowInstallPWAModal] = useState(
+    !cookies.coPWA && token ? true : false
   );
   const [creditUi, setCreditUi] = useState(data?.currentUser?.credit);
   const [impressionsEnabled, setImpressionsEnabled] = useState(true);
@@ -430,6 +434,23 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
 
   return (
     <>
+      {showInstallPWAModal ? (
+        <section
+          className="fullModal"
+          style={{
+            zIndex: 110,
+          }}
+        >
+          <InstallPWA
+            onDone={() => {
+              setCookie("coPWA", "true", { path: "/" });
+              setShowInstallPWAModal(false);
+            }}
+          />
+        </section>
+      ) : (
+        <></>
+      )}
       {showInterestsModal ? (
         <section
           className="fullModal"
