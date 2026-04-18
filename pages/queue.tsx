@@ -136,9 +136,6 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
   const [showFavoriteInterestModal, setShowFavoriteInterestModal] = useState(
     !coFavInt && token ? true : false
   );
-  const [showInstallPWAModal, setShowInstallPWAModal] = useState(
-    !cookies.coPWA && token ? true : false
-  );
   const [creditUi, setCreditUi] = useState(data?.currentUser?.credit);
   const [impressionsEnabled, setImpressionsEnabled] = useState(true);
 
@@ -434,23 +431,6 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
 
   return (
     <>
-      {showInstallPWAModal ? (
-        <section
-          className="fullModal"
-          style={{
-            zIndex: 110,
-          }}
-        >
-          <InstallPWA
-            onDone={() => {
-              setCookie("coPWA", "true", { path: "/" });
-              setShowInstallPWAModal(false);
-            }}
-          />
-        </section>
-      ) : (
-        <></>
-      )}
       {showInterestsModal ? (
         <section
           className="fullModal"

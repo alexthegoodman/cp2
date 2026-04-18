@@ -21,6 +21,7 @@ import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import apiClient from "../helpers/APIClient";
 import MixpanelBrowser from "../helpers/MixpanelBrowser";
 import { upload } from "@vercel/blob/client";
+import InstallPWA from "@/components/growth/InstallPWA/InstallPWA";
 
 const getUserData = async (token) => {
   apiClient.setupClient(token);
@@ -30,7 +31,7 @@ const getUserData = async (token) => {
 
 const UploadContent = () => {
   const { t } = useTranslation();
-  const [cookies] = useCookies(["coUserToken"]);
+  const [cookies, setCookie] = useCookies(["coUserToken", "coPWA"]);
   const token = cookies.coUserToken;
 
   const mixpanel = new MixpanelBrowser();
@@ -45,6 +46,8 @@ const UploadContent = () => {
   const [step, setStep] = useState(1);
   const [contentType, setContentType] = useState("image");
   const [showInterestsModal, setShowInterestsModal] = useState(false);
+  const [showInstallPWAModal, setShowInstallPWAModal] = useState(false);
+  const [postRedirectPath, setPostRedirectPath] = useState("");
   const [selectedInterest, setSelectedInterest] = useState<any>(null);
   const [formErrorMessage, setFormErrorMessage] = useState("");
   const [hasEnoughCredits, setHasEnoughCredits] = useState(true);
@@ -106,9 +109,16 @@ const UploadContent = () => {
 
       mixpanel.track("Post Created", { createdPost });
 
-      router.push(
-        `/post/${createdPost.interest?.generatedInterestSlug}/${createdPost.generatedTitleSlug}/?backPath=/profile/`
-      );
+      const redirectPath = `/post/${createdPost.interest?.generatedInterestSlug}/${createdPost.generatedTitleSlug}/?backPath=/profile/`;
+
+      // Check if it's the first post and show PWA modal
+      const isFirstPost = data?.getUser?.posts?.length === 0;
+      if (isFirstPost && !cookies.coPWA) {
+        setPostRedirectPath(redirectPath);
+        setShowInstallPWAModal(true);
+      } else {
+        router.push(redirectPath);
+      }
     } catch (error: any) {
       console.error("error", error);
       setSubmitLoading(false);
@@ -218,6 +228,24 @@ const UploadContent = () => {
 
   return (
     <>
+      {showInstallPWAModal ? (
+        <section
+          className="fullModal"
+          style={{
+            zIndex: 110,
+          }}
+        >
+          <InstallPWA
+            onDone={() => {
+              setCookie("coPWA", "true", { path: "/" });
+              setShowInstallPWAModal(false);
+              router.push(postRedirectPath);
+            }}
+          />
+        </section>
+      ) : (
+        <></>
+      )}
       {showInterestsModal ? (
         <InterestsContent
           onBack={onCloseInterests}
