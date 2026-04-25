@@ -7,23 +7,43 @@
   }
 }
 
+.updateBanner {
+  display: flex;
+  flex-direction: row;
+}
+
 .inviteFriends {
   background: $brandGradient;
-  padding: 20px 25px;
+  padding: 25px 25px;
+  width: 50%;
 
   .inviteFriendsInner {
     display: flex;
-    flex-direction: row;
+    // flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
 
     .inviteLabelWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
       .inviteLabel {
+        display: block;
         color: white;
         font-weight: 600;
+        font-size: 16px;
+
+        &:nth-of-type(2) {
+          font-size: 14px;
+          font-weight: 500;
+        }
       }
     }
     .inviteButtons {
+      margin-top: 10px;
+
       .buttonList {
         list-style: none;
         display: flex;
@@ -32,20 +52,29 @@
 
         .listItem {
           margin-right: 8px;
+          background: none;
 
           &:last-of-type {
             margin-right: 0;
           }
 
-          a {
+          a, button {
             text-decoration: none;
-            border-radius: 50%;
-            width: 35px;
+            border-radius: 25px;
+            // width: 35px;
+            min-width: 35px;
+            padding: 0px 14px;
             height: 35px;
             display: flex;
             justify-content: center;
             align-items: center;
             background: rgba(255, 255, 255, 0.8);
+            border: 1px rgba(50, 50, 50, 0.75) solid;
+            outline: none;
+
+            span {
+              margin-right: 6px;
+            }
 
             &:focus {
               outline: 1px $red solid;
@@ -64,5 +93,20 @@
         }
       }
     }
+  }
+}
+
+.adCTA {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  background-color: $frenchRaspberry;
+  height: 100px;
+  color: white;
+  padding: 20px;
+  line-height: 120%;
+
+  .adCTAInner {
+    padding-right: 6px;
   }
 }

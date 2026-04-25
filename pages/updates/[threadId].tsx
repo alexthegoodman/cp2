@@ -118,11 +118,11 @@ export async function getServerSideProps(context) {
 
   const { threadId } = context.query;
 
-  // console.info("token threadId", token, threadId);
+  console.info("token threadId", token, threadId);
 
   const threadData = await getUserAndThreadData(token, threadId);
 
-  // console.info("getServerSideProps", threadData);
+  console.info("getServerSideProps", threadData);
 
   const locale =
     typeof cookieData.coUserLng !== "undefined"

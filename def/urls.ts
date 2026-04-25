@@ -19,3 +19,5 @@ export const cpGraphqlUrl =
   env === "production"
     ? "https://commonplace-platform.vercel.app:4000/graphql"
     : `http://${process.env.NEXT_PUBLIC_DOCKER_HOST}:4000/graphql`;
+
+export const fullUrl = protocol + cookieDomain;
