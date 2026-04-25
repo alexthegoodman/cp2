@@ -17,7 +17,7 @@ import nextI18NextConfig from "../../next-i18next.config.js";
 import { appWithTranslation, useTranslation } from "next-i18next/pages";
 import apiClient from "../../helpers/APIClient";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const getUserThreadData = async (token) => {
   apiClient.setupClient(token);
@@ -46,14 +46,60 @@ const UpdatesContent: NextPage = () => {
     data?.getUser?.generatedUsername
   );
 
-  const filteredThreads =
-    filter === "unread"
+  const userPosts = useMemo(() => {
+    return data?.getUser.posts;
+  }, [data?.getUser])
+
+  // const filteredThreads =
+  //   filter === "unread"
+  //     ? data?.getUserThreads?.filter((thread) =>
+  //         unreadThreads.some((unread) => unread.id === thread.id)
+  //       )
+  //     : data?.getUserThreads;
+
+  // const threadsPosts = useMemo(() => {
+  //   const ids = new Set<string>();
+
+  //   const posts = data?.getUserThreads.flatMap((thread) =>
+  //     thread?.messages.map((mes) => mes?.post)
+  //   ) ?? [];
+
+  //   return posts.filter((post): post is NonNullable<typeof post> => {
+  //     if (!post?.id || ids.has(post.id)) return false;
+  //     ids.add(post.id);
+  //     return true;
+  //   });
+  // }, [data?.getUserThreads]);
+
+  const { threadsPosts, postIds } = useMemo(() => {
+    const ids = new Set<string>();
+
+    const posts = data?.getUserThreads.flatMap((thread) =>
+      thread?.messages.map((mes) => mes?.post)
+    ) ?? [];
+
+    const filteredPosts = posts.filter((post): post is NonNullable<typeof post> => {
+      if (!post?.id || ids.has(post.id)) return false;
+      ids.add(post.id);
+      return true;
+    });
+
+    return { threadsPosts: filteredPosts, postIds: ids };
+  }, [data?.getUserThreads]);
+
+  const filteredThreads = useMemo(() =>
+    (filter === "unread"
       ? data?.getUserThreads?.filter((thread) =>
           unreadThreads.some((unread) => unread.id === thread.id)
         )
-      : data?.getUserThreads;
+      : data?.getUserThreads
+    )?.filter((thread) =>
+      thread?.messages.some((mes) => mes?.post?.id && postIds.has(mes.post.id))
+    ),
+    [data?.getUserThreads, filter, unreadThreads, postIds]
+  );
 
-  // console.info("UpdatesContent", data);
+  console.info("UpdatesContent", data, threadsPosts);
 
   return (
     <section className="updates">
@@ -73,7 +119,19 @@ const UpdatesContent: NextPage = () => {
           rightIcon={<></>}
         />
         <InviteFriends />
-        <div className="updatesFilters">
+        {threadsPosts?.length > 0 ? (
+          <div className="updatesFilters">
+            {threadsPosts?.map((post, i) => {
+              return (<button
+                className={`filterButton ${filter === post.id ? "active" : ""}`}
+                onClick={() => setFilter(post.id)}
+              >
+                {post.title}
+              </button>)
+            })}
+          </div>
+        ) : <></>}
+        {/* <div className="updatesFilters">
           <button
             className={`filterButton ${filter === "all" ? "active" : ""}`}
             onClick={() => setFilter("all")}
@@ -89,7 +147,7 @@ const UpdatesContent: NextPage = () => {
               <span className="unreadCount">{unreadThreadCount}</span>
             )}
           </button>
-        </div>
+        </div> */}
         <div className="scrollContainer updatesContainer">
           {filteredThreads?.length > 0 ? (
             filteredThreads?.map((thread, i) => {

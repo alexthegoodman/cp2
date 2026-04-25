@@ -32,10 +32,11 @@ export default async function handler(
           }
         },
         messages: {
-          take: 1,
+          // take: 1,
           orderBy: { createdAt: "desc" },
           include: {
-            user: true
+            user: true,
+            post: true
           }
         },
         readHistory: true
