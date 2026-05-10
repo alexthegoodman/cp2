@@ -85,7 +85,7 @@ main {
 
 @media screen and (min-width: $desktopWidth) {
   .scrollContainer {
-    width: $desktopWidth;
+    width: $desktopContentWidth;
     margin: 0 auto;
 
     right: -120px;

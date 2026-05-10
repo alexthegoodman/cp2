@@ -12,9 +12,12 @@
     }
 
     .primaryHeaderInner {
+      
       .headerIcon {
         // width: auto;
         padding: 0 15px;
+
+        filter: none;
 
         a.navOption {
           color: #737373;

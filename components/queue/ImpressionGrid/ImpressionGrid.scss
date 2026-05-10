@@ -1,6 +1,7 @@
 @media screen and (min-width: $desktopWidth) {
   section.impressionGridWrapper {
-    width: $desktopWidth - 80px;
+    // width: $desktopWidth - 80px;
+    width: $desktopContentWidth;
     margin-left: 40px;
     margin: 0 auto;
     position: relative;
@@ -98,8 +99,9 @@
       flex-wrap: wrap;
       width: 5000px;
       height: 140px;
-      overflow-x: scroll;
-      overflow-y: hidden;
+      // overflow-x: scroll;
+      // overflow-y: hidden;
+      overflow: hidden;
       padding-left: 15px;
 
       &.smallGrid {
