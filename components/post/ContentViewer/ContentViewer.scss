@@ -4,8 +4,11 @@
   width: 100%;
   // max-width: $desktopWidth - 60px;
   // margin: 0 auto;
-  background: rgb(245, 245, 245);
+  // background: rgb(245, 245, 245);
+  // background: $backBlack;
+   background: radial-gradient(at bottom center, $frontBlack, $backBlack);
   overflow: hidden;
+  border-radius: 10px;
 
   .contentViewerInner {
     // height: calc(100vh - 360px);
@@ -32,7 +35,11 @@
 
 @media screen and (min-width: $desktopWidth) {
   .contentViewer {
+    max-height: 500px;
+    
     .contentViewerInner {
+      max-height: 500px;
+
       img {
         max-height: calc(100vh - 400px);
       }

@@ -1,14 +1,20 @@
 @media screen and (min-width: $desktopWidth) {
   header.primaryHeader,
   header.primaryHeader.whiteHeader {
-    width: $desktopWidth;
+    // width: $desktopWidth;
+    width: 100vw;
     margin: 0 auto;
 
     position: relative;
-    right: -100px;
+    // right: -100px;
 
     &.centerHeader {
       right: auto;
+    }
+
+    .headerTitleWrapper {
+      left: -100px;
+    position: relative;
     }
 
     .primaryHeaderInner {

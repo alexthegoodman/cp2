@@ -1,3 +1,17 @@
+@media screen and (min-width: $desktopWidth) {
+  section.videoViewer {
+    max-height: 500px;
+
+    .videoViewerInner {
+      .contentWrapper {
+        video {
+          max-height: 500px;
+        }
+      }
+    }
+  }
+}
+
 .videoViewer {
   width: 100%;
   max-height: 700px;

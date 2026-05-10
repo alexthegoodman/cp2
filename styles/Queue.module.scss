@@ -41,7 +41,9 @@
   }
 
   @media screen and (min-width: $desktopWidth) {
-    height: calc(100vh - 280px);
+    // height: calc(100vh - 280px);
+    height: 100vh;
+    overflow-x: hidden;
   }
 }
 
