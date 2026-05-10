@@ -5,6 +5,12 @@ import * as React from "react";
 
 import { PrimaryNavigationProps } from "./PrimaryNavigation.d";
 
+import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
+import { GridFourIcon } from "@phosphor-icons/react/dist/csr/GridFour";
+import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
+import { MailboxIcon } from "@phosphor-icons/react/dist/csr/Mailbox";
+import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
+
 const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
   ref = null,
   className = "",
@@ -28,9 +34,10 @@ const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
             }`}
             aria-label="Upload"
             tabIndex={1}>
-          <div>
+          <div className="optionInner">
             {/* <div className="feather-icon icon-upload"></div> */}
-            <i className="typcn typcn-plus"></i>
+            {/* <i className="typcn typcn-plus"></i> */}
+            <PlusIcon size={32} />
             <span className="navLabel desktopOnly">{t("common:upload")}</span>
           </div>
         </Link>
@@ -40,7 +47,8 @@ const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
               tabIndex={1}>
             <div>
               {/* <div className="feather-icon icon-upload"></div> */}
-              <i className="typcn typcn-equals"></i>
+              {/* <i className="typcn typcn-equals"></i> */}
+              <GridFourIcon />
               <span className="navLabel desktopOnly">{t("common:queue")}</span>
             </div>
           </Link>
@@ -50,7 +58,8 @@ const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
             tabIndex={2}>
           <div>
             {/* <div className="feather-icon icon-user"></div> */}
-            <i className="typcn typcn-user-outline"></i>
+            {/* <i className="typcn typcn-user-outline"></i> */}
+            <UserIcon />
             <span className="navLabel desktopOnly">{t("common:profile")}</span>
           </div>
         </Link>
@@ -69,7 +78,8 @@ const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
             ) : (
               <></>
             )}
-            <i className="typcn typcn-messages"></i>
+            {/* <i className="typcn typcn-messages"></i> */}
+            <MailboxIcon />
             <span className="navLabel desktopOnly">{t("common:updates")}</span>
           </div>
         </Link>
@@ -80,7 +90,8 @@ const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
               aria-label="Settings"
               tabIndex={2}>
                 <div>
-              <i className="typcn typcn-cog"></i>
+              {/* <i className="typcn typcn-cog"></i> */}
+              <GearIcon />
               <span className="navLabel desktopOnly">
                 {t("common:settings")}
               </span>

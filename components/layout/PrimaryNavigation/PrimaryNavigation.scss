@@ -42,8 +42,16 @@
           background: transparent;
           color: $red;
 
+          .optionInner {
+            height: auto;
+          }
+
           .typcn {
             color: $red;
+          }
+
+          svg {
+            color: #737373;
           }
         }
       }
@@ -76,6 +84,11 @@
         outline: 1px $red solid;
       }
 
+      svg {
+        position: relative;
+        top: 2px;
+      }
+
       .navIndicator {
         font-size: 11px;
         position: absolute;
@@ -105,6 +118,15 @@
           font-size: 36px;
           font-weight: 200;
           color: white;
+        }
+
+        .optionInner {
+          height: 32px;
+        }
+
+        svg {
+          color: white;
+          top: 0px;
         }
       }
     }
