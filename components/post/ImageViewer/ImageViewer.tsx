@@ -125,13 +125,13 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
             <div
               className="panContainer"
               style={{
-                height:  containerHeight ? containerHeight : "auto",
+                height: !mini && containerHeight ? containerHeight : "auto",
               }}
             >
               <div className="panContainerInner">
                 <img
                   style={{
-                    height:  containerHeight ? containerHeight : "auto",
+                    height:  !mini && containerHeight ? containerHeight : "auto",
                   }}
                   alt={alt}
                   title={alt}
@@ -140,6 +140,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
               </div>
             </div>
             
+            {!mini && (
               <div
                 className="controls"
                 onTouchStart={controlsDragDown}
@@ -154,6 +155,8 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
                   <i className="typcn typcn-arrow-unsorted"></i>
                 </span>
               </div>
+            )}
+              
             
           </>
         

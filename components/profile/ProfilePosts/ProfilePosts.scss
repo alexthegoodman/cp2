@@ -8,3 +8,11 @@
     grid-gap: 25px 20px;
   }
 }
+
+@media screen and (min-width: $desktopWidth) {
+  .profilePosts {
+    .profilePostsInner {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+}
