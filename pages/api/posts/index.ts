@@ -13,7 +13,7 @@ export default async function handler(
   const currentUser = await verifyToken(req);
 
   if (req.method === "GET") {
-    const { mode, interestId, page = "1" } = req.query;
+    const { mode, interestId, categoryId, page = "1" } = req.query;
     const p = parseInt(page as string) || 1;
 
     try {
@@ -22,6 +22,16 @@ export default async function handler(
 
       if (interestId) {
         whereClause.interestId = interestId as string;
+      }
+
+      if (categoryId) {
+        whereClause.interest = {
+          categories: {
+            some: {
+              id: categoryId as string,
+            },
+          },
+        };
       }
 
       if (mode === "queue" && currentUser) {

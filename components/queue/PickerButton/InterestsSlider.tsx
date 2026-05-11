@@ -10,20 +10,31 @@ const InterestsSlider: React.FC<any> = ({
   ref = null,
   className = "",
   onClick = (e) => console.info("Click PickerButton"),
-  interestsByCategory = null
+  interestsByCategory = [],
+  selectedInterest = null,
+  selectedCategory = null,
+  onSelectInterest = (cat, int) => console.info("Selected", cat, int)
 }) => {
   const { t } = useTranslation();
 
-  console.info("interestsByCategory", interestsByCategory)
+  // console.info("interestsByCategory", interestsByCategory)
 
   return (
     <div className="sliderContainer">
-      <div className="sliderItem">
+      <div 
+        className={`sliderItem ${!selectedInterest && !selectedCategory ? "selected" : ""}`}
+        onClick={() => onSelectInterest(null, null)}
+      >
         All
       </div>
       {interestsByCategory.map((cat) => {
+        const isSelected = selectedCategory?.id === cat.id;
         return (
-          <div className="sliderItem">
+          <div 
+            key={cat.id}
+            className={`sliderItem ${isSelected ? "selected" : ""}`}
+            onClick={() => onSelectInterest(cat, null)}
+          >
             {cat.name}
           </div>
         )

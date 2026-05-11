@@ -37,7 +37,7 @@ import ImpressionWheel2 from "@/components/queue/ImpressionWheel/ImpressionWheel
 import InstallPWA from "@/components/growth/InstallPWA/InstallPWA";
 import InterestsSlider from "@/components/queue/PickerButton/InterestsSlider";
 
-const getPostsAndUserData = async (token, interestId = null) => {
+const getPostsAndUserData = async (token, interestId = null, categoryId = null) => {
 
   let userData = null;
   if (token) {
@@ -46,15 +46,17 @@ const getPostsAndUserData = async (token, interestId = null) => {
   userData = await apiClient.get("/user");
   }
 
-  console.info("getPostsAndUserData interestId", interestId);
+  console.info("getPostsAndUserData interestId", interestId, "categoryId", categoryId);
 
   const postsData = await apiClient.get("/posts", {
     interestId,
+    categoryId,
     mode: "queue",
   });
 
   const explorePostsData = await apiClient.get("/posts", {
     interestId,
+    categoryId,
     page: 1,
   });
 
@@ -98,10 +100,11 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
     // favoriteInterest ? favoriteInterest : null // this inhibits discovery at early stages
     null
   );
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
 
   const { data, mutate } = useSWR(
-    "queueKey",
-    () => getPostsAndUserData(token, selectedInterest?.id),
+    ["queueKey", token, selectedInterest?.id, selectedCategory?.id],
+    () => getPostsAndUserData(token, selectedInterest?.id, selectedCategory?.id),
     {
       revalidateIfStale: true,
       revalidateOnFocus: true,
@@ -115,8 +118,8 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
   useEffect(() => {
     // console.info("check queue", cache.get("queueKey"));
     // cache.clear(); // not a function?
-    mutate(() => getPostsAndUserData(token, selectedInterest?.id));
-  }, []);
+    mutate();
+  }, [selectedInterest, selectedCategory]);
 
   const firstId = data?.posts[0]?.id;
 
@@ -144,15 +147,18 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
     const newPage = explorePostsPage + 1;
     const addtPostsData = await apiClient.get("/posts", {
       interestId: selectedInterest?.id,
+      categoryId: selectedCategory?.id,
       page: newPage,
     });
+
+    console.info("explorePostsData", addtPostsData, explorePostsData);
 
     setExploreHasMore(
       addtPostsData.length === 20 ? true : false
     );
     setExplorePostsPage(newPage);
     setExplorePostsData([
-      ...explorePostsData,
+      // ...explorePostsData,
       ...addtPostsData,
     ]);
   };
@@ -323,7 +329,7 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
     // setQueueIndex(queueIndex + 1);
     setTimeout(async () => {
       // setQueuePostId(nextPostId);
-      mutate(() => getPostsAndUserData(token, selectedInterest?.id)); // refresh swrr
+      mutate(() => getPostsAndUserData(token, selectedInterest?.id, selectedCategory?.id)); // refresh swrr
       // // TODO: send impression message
       // // const authorUsername = data?.currentUser?.generatedUsername;
       const postCreatorUsername = currentPost?.creator?.generatedUsername;
@@ -380,8 +386,9 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
 
     setShowInterestsModal(false);
     setSelectedInterest(interest);
+    setSelectedCategory(category);
 
-    await mutate(() => getPostsAndUserData(token, interest?.id)); // refresh swrr
+    await mutate(() => getPostsAndUserData(token, interest?.id, category?.id)); // refresh swrr
 
     await postAnimation.start((i) => ({
       opacity: 1,
@@ -500,7 +507,12 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
           <div className="queueInner">
             <NextSeo title={`Queue | CommonPlace`} />
             <section className="desktopOnly">
-              <InterestsSlider interestsByCategory={interestsByCategory} />
+              <InterestsSlider
+                interestsByCategory={interestsByCategory}
+                selectedInterest={selectedInterest}
+                selectedCategory={selectedCategory}
+                onSelectInterest={onConfirmInterest}
+              />
             </section>
             <PrimaryHeader
               leftIcon={
@@ -527,7 +539,12 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
                     selectedFeed={SelectedFeed.Interests}
                     selectedInterest={selectedInterest}
                   /> */}
-                  <InterestsSlider interestsByCategory={interestsByCategory} />
+                  <InterestsSlider
+                    interestsByCategory={interestsByCategory}
+                    selectedInterest={selectedInterest}
+                    selectedCategory={selectedCategory}
+                    onSelectInterest={onConfirmInterest}
+                  />
                 </div>
               }
               rightIcon={
