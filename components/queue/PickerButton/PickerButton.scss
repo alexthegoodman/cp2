@@ -36,3 +36,30 @@
   flex-direction: row;
   gap: 6px;
 }
+
+.sliderContainer {
+  height: 35px;
+  width: calc(75vw - 100px);
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  padding-left: 100px;
+  padding-top: 5px;
+
+  .sliderItem {
+    padding: 6px 12px;
+    background-color: $frontBlack;
+    color: white;
+    height: 25px;
+    border-radius: 10px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: $desktopWidth) {
+  .sliderContainer {
+    padding-left: 0;
+    overflow-x: scroll;
+    width: 60vw;
+  }
+}

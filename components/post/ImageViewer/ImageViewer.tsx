@@ -61,6 +61,20 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
     }, imageUrl);
   }, []);
 
+  React.useEffect(() => {
+    const handleGlobalMouseUp = () => {
+      if (dragEngaged) {
+        setDragEngaged(false);
+        enableScroll();
+        setImageHeight(containerHeight);
+        setInitialPageY(0);
+      }
+    };
+
+    window.addEventListener("mouseup", handleGlobalMouseUp);
+    return () => window.removeEventListener("mouseup", handleGlobalMouseUp);
+  }, [dragEngaged, containerHeight]);
+
   const controlsDragDown = () => {
     // console.info("controlsDragDown");
     setDragEngaged(true);
@@ -104,20 +118,20 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
   };
 
   return (
-    <section className={`imageViewer ${mini ? "miniViewer" : "largeViewer"}`}>
-      <div className="imageViewerInner">
-        {mini || (!mini && containerHeight) ? (
+    <section className={`imageViewer miniViewer`}>
+      <div className="imageViewerInner" onMouseMove={controlsMouseMove}>
+        
           <>
             <div
               className="panContainer"
               style={{
-                height: !mini && containerHeight ? containerHeight : "auto",
+                height:  containerHeight ? containerHeight : "auto",
               }}
             >
               <div className="panContainerInner">
                 <img
                   style={{
-                    height: !mini && containerHeight ? containerHeight : "auto",
+                    height:  containerHeight ? containerHeight : "auto",
                   }}
                   alt={alt}
                   title={alt}
@@ -125,14 +139,14 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
                 />
               </div>
             </div>
-            {!mini ? (
+            
               <div
                 className="controls"
                 onTouchStart={controlsDragDown}
                 onTouchEnd={controlsDragUp}
                 onTouchMove={controlsDragMove}
                 // disabled resizing on desktop
-                // onMouseDown={controlsDragDown}
+                onMouseDown={controlsDragDown}
                 // onMouseUp={controlsDragUp}
                 // onMouseMove={controlsMouseMove}
               >
@@ -140,13 +154,9 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
                   <i className="typcn typcn-arrow-unsorted"></i>
                 </span>
               </div>
-            ) : (
-              <></>
-            )}
+            
           </>
-        ) : (
-          <></>
-        )}
+        
       </div>
     </section>
   );

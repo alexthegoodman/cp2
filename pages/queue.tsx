@@ -35,6 +35,7 @@ import apiClient from "../helpers/APIClient";
 import ImpressionWheel from "@/components/queue/ImpressionWheel/ImpressionWheel";
 import ImpressionWheel2 from "@/components/queue/ImpressionWheel/ImpressionWheel2";
 import InstallPWA from "@/components/growth/InstallPWA/InstallPWA";
+import InterestsSlider from "@/components/queue/PickerButton/InterestsSlider";
 
 const getPostsAndUserData = async (token, interestId = null) => {
 
@@ -82,7 +83,7 @@ const getPostsAndUserData = async (token, interestId = null) => {
   return returnData;
 };
 
-const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
+const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCategory }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const { cache } = useSWRConfig();
@@ -498,6 +499,9 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
         <section className="queue">
           <div className="queueInner">
             <NextSeo title={`Queue | CommonPlace`} />
+            <section className="desktopOnly">
+              <InterestsSlider interestsByCategory={interestsByCategory} />
+            </section>
             <PrimaryHeader
               leftIcon={
                 <div className="leftHeaderContainer">
@@ -514,14 +518,17 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest }) => {
                 </div>
               }
               titleComponent={
-                <PickerButton
-                  onSelectInterestClick={onSelectInterestClick}
-                  onSelectFollowingFeedClick={() => {
-                    console.info("Need to setup following feed");
-                  }}
-                  selectedFeed={SelectedFeed.Interests}
-                  selectedInterest={selectedInterest}
-                />
+                <div className="mobileOnly">
+                  {/* <PickerButton
+                    onSelectInterestClick={onSelectInterestClick}
+                    onSelectFollowingFeedClick={() => {
+                      console.info("Need to setup following feed");
+                    }}
+                    selectedFeed={SelectedFeed.Interests}
+                    selectedInterest={selectedInterest}
+                  /> */}
+                  <InterestsSlider interestsByCategory={interestsByCategory} />
+                </div>
               }
               rightIcon={
                 <PrimaryNavigation
@@ -619,7 +626,7 @@ const Queue: NextPage<{
   coUserLng: string;
   coFavInt: string;
   favoriteInterest: string;
-}> = ({ fallback, coUserLng, coFavInt, favoriteInterest }) => {
+}> = ({ fallback, coUserLng, coFavInt, favoriteInterest, interestsByCategory }) => {
   const [state, dispatch] = useReducer(QueueContextReducer, QueueContextState);
 
   return (
@@ -631,6 +638,7 @@ const Queue: NextPage<{
           coUserLng={coUserLng}
           coFavInt={coFavInt}
           favoriteInterest={favoriteInterest}
+          interestsByCategory={interestsByCategory}
         />
       </SWRConfig>
     </QueueContext.Provider>
@@ -687,6 +695,7 @@ export async function getServerSideProps(context) {
         typeof cookieData.coUserLng !== "undefined"
           ? cookieData.coUserLng
           : null,
+      interestsByCategory: returnData.categoriesAndInterestsData.getCategories,
       coFavInt: favoriteInterestId,
       favoriteInterest: interest,
       ...(await serverSideTranslations(

@@ -35,13 +35,13 @@
 
 @media screen and (min-width: $desktopWidth) {
   .contentViewer {
-    max-height: 500px;
+    // max-height: 500px;
     
     .contentViewerInner {
-      max-height: 500px;
+      // max-height: 500px;
 
       img {
-        max-height: calc(100vh - 400px);
+        // max-height: calc(100vh - 400px);
       }
     }
   }
