@@ -12,13 +12,13 @@ const Home: NextPage = () => {
   return (
     <main className="landingContainer">
       <NextSeo
-        title={`CommonPlace | Welcome`}
-        description={`Get free feedback and connect over all hobbies on CommonPlace`}
+        title={`CommonPlace | Get Free Feedback on Art, Music, Writing`}
+        description={`Get free feedback and reviews on all kinds of hobbies (art, music, writing, and more) while networking with other hobbyists on CommonPlace.`}
         canonical={canonicalUrl}
         openGraph={{
           url: canonicalUrl,
-          title: `Find friends and their hobbies on CommonPlace`,
-          description: "CommonPlace has posts from people like yourself",
+          title: `Get Free Feedback on Art, Music, Writing, and more on CommonPlace`,
+          description: "CommonPlace helps people exchange feedback on each others content!",
           images: [{ url: "/ogImage1.jpg" }],
           site_name: "CommonPlace",
         }}
