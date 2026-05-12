@@ -16,7 +16,7 @@ export default class Mandrill {
                 name: toName,
               },
             ],
-            from_email: "admin@commonplace.social",
+            from_email: "alexthegoodman@gmail.com",
             from_name: "CommonPlace",
             subject,
           },

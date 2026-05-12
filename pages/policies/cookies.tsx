@@ -21,7 +21,28 @@ const Cookies: NextPage = () => {
         />
         <section className="policyContent">
           <div className="policyContentInner">
-            <iframe src="https://app.termly.io/document/cookie-policy/7627fe4c-fae6-4426-a6e2-fa60eb2ba5e3" />
+            <h3>Cookie Policy</h3>
+            <p>Last Updated: May 11, 2026</p>
+
+            <p>CommonPlace uses cookies to enhance your experience. This policy explains what cookies are and how we use them.</p>
+
+            <h4>1. What are Cookies?</h4>
+            <p>Cookies are small text files stored on your device by your web browser. They help websites remember your preferences and keep you logged in.</p>
+
+            <h4>2. How We Use Cookies</h4>
+            <ul>
+              <li><strong>Essential Cookies:</strong> These are required for the platform to function, such as keeping you logged in.</li>
+              <li><strong>Analytics Cookies:</strong> We use these to understand how users interact with the site, helping us improve the user experience.</li>
+              <li><strong>Preference Cookies:</strong> These remember your settings, such as your language preference.</li>
+            </ul>
+
+            <h4>3. Third-Party Cookies</h4>
+            <p>We may use third-party services like Google Analytics or Mixpanel that set their own cookies to provide us with anonymous usage data.</p>
+
+            <h4>4. Managing Cookies</h4>
+            <p>You can control or delete cookies through your browser settings. However, disabling essential cookies may prevent you from using certain parts of CommonPlace.</p>
+
+            <p>If you have questions about our use of cookies, please contact us at alexthegoodman@gmail.com.</p>
           </div>
         </section>
       </div>

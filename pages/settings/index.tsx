@@ -59,7 +59,7 @@ const Settings: NextPage = () => {
             <Link href="/policies/">
               {t("settings:policies")}
             </Link>
-            <a href="mailto:admin@commonplace.social">
+            <a href="mailto:alexthegoodman@gmail.com">
               {t("settings:contactSupport")}
             </a>
             <div className="bottomLinks">

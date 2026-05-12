@@ -26,8 +26,8 @@ const DataDeletion: NextPage = () => {
             <p>
               If you require any data or Facebook-related data to be deleted
               from our database, this can be done easily by emailing:
-              <a href="mailto:admin@commonplace.social">
-                admin@commonplace.social
+              <a href="mailto:alexthegoodman@gmail.com">
+                alexthegoodman@gmail.com
               </a>
             </p>
           </div>
