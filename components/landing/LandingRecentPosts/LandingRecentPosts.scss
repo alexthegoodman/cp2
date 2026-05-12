@@ -1,0 +1,51 @@
+.landingRecentPosts {
+  background: #ffffff; /* Slightly different background to separate sections */
+
+  .postPreview {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    .postVisual {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .contentViewer {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        border-radius: 0;
+
+        .contentViewerInner {
+          height: 100%;
+          
+          img, video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+
+    span {
+      font-size: 20px !important;
+      margin-bottom: 5px !important;
+    }
+
+    p {
+      font-size: 14px !important;
+      color: #888 !important;
+    }
+  }
+}

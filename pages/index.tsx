@@ -1,12 +1,14 @@
 import type { NextPage } from "next";
 import { NextSeo } from "next-seo";
 import Utilities from "@/lib";
+import prisma from "@/lib/prisma";
 import { cpDomain } from "../def/urls";
 import LandingBlockA from "../components/landing/LandingBlockA/LandingBlockA";
 import LandingFeaturesA from "../components/landing/LandingFeaturesA/LandingFeaturesA";
 import LandingHeroA from "../components/landing/LandingHeroA/LandingHeroA";
+import LandingRecentPosts from "../components/landing/LandingRecentPosts/LandingRecentPosts";
 
-const Home: NextPage = () => {
+const Home: NextPage<any> = ({ recentPosts = [] }) => {
   const canonicalUrl = "https://" + cpDomain;
 
   return (
@@ -75,6 +77,7 @@ const Home: NextPage = () => {
           },
         ]}
       />
+      <LandingRecentPosts posts={recentPosts} />
       <LandingBlockA
         headline="Grow your audience"
         description={
@@ -103,11 +106,18 @@ export async function getServerSideProps(context) {
     };
   }
 
+  const recentPosts = await prisma.post.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 3,
+    include: {
+      interest: true,
+      creator: true,
+    },
+  });
+
   return {
     props: {
-      // fallback: {
-      //   profileKey: null,
-      // },
+      recentPosts: JSON.parse(JSON.stringify(recentPosts)),
     },
   };
 }
