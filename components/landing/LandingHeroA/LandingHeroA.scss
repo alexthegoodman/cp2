@@ -39,25 +39,26 @@
         }
 
         h1 {
-          font-family: "Playfair Display", serif;
+          font-family: "Sora", "Helvetica";
           color: $red;
-          font-size: 72px;
+          font-size: 64px;
           font-style: normal;
           line-height: 84px;
           letter-spacing: normal;
+          font-weight: 600;
           margin-bottom: 15px;
 
           strong {
-            font-family: "Playfair Display", serif;
+            font-family: "Sora", "Helvetica";
             font-weight: 600;
           }
         }
         p {
-          font-family: "Playfair Display", serif;
+          font-family: "Sora", "Helvetica";
           word-break: break-word;
           flex-flow: column;
           color: #2a2a2a;
-          font-size: 16px;
+          font-size: 18px;
           line-height: 150%;
           text-align: left;
         }

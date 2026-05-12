@@ -7,8 +7,12 @@ import LandingBlockA from "../components/landing/LandingBlockA/LandingBlockA";
 import LandingFeaturesA from "../components/landing/LandingFeaturesA/LandingFeaturesA";
 import LandingHeroA from "../components/landing/LandingHeroA/LandingHeroA";
 import LandingRecentPosts from "../components/landing/LandingRecentPosts/LandingRecentPosts";
+import LandingSocialProof from "../components/landing/LandingSocialProof";
+import LandingFooter from "../components/landing/LandingFooter";
+import LandingInterests from "../components/landing/LandingInterests";
+import LandingFAQ from "../components/landing/LandingFAQ";
 
-const Home: NextPage<any> = ({ recentPosts = [] }) => {
+const Home: NextPage<any> = ({ recentPosts = [], categories = [] }) => {
   const canonicalUrl = "https://" + cpDomain;
 
   return (
@@ -36,14 +40,17 @@ const Home: NextPage<any> = ({ recentPosts = [] }) => {
         visualUrl="/landing/productArtEnglish.png"
       >
         <>
+          
           <a href="/sign-up" className="button">
             Sign Up
           </a>
           <a href="/sign-in" className="button">
             Sign In
           </a>
+          {/* <LandingSocialProof /> */}
         </>
       </LandingHeroA>
+      
       <LandingFeaturesA
         headline="Gather honest opinions"
         description={
@@ -88,6 +95,9 @@ const Home: NextPage<any> = ({ recentPosts = [] }) => {
           </p>
         }
       />
+      <LandingInterests categories={categories} />
+      <LandingFAQ />
+      <LandingFooter />
     </main>
   );
 };
@@ -106,18 +116,29 @@ export async function getServerSideProps(context) {
     };
   }
 
-  const recentPosts = await prisma.post.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 3,
-    include: {
-      interest: true,
-      creator: true,
-    },
-  });
+  const [recentPosts, categories] = await Promise.all([
+    prisma.post.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 3,
+      include: {
+        interest: true,
+        creator: true,
+      },
+    }),
+    prisma.category.findMany({
+      // take: 5,
+      include: {
+        interests: {
+          take: 3
+        }
+      }
+    })
+  ]);
 
   return {
     props: {
       recentPosts: JSON.parse(JSON.stringify(recentPosts)),
+      categories: JSON.parse(JSON.stringify(categories)),
     },
   };
 }
