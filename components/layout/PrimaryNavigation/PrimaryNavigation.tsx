@@ -7,6 +7,7 @@ import { PrimaryNavigationProps } from "./PrimaryNavigation.d";
 
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { GridFourIcon } from "@phosphor-icons/react/dist/csr/GridFour";
+import { ListIcon } from "@phosphor-icons/react/dist/csr/List";
 import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
 import { MailboxIcon } from "@phosphor-icons/react/dist/csr/Mailbox";
 import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
@@ -41,18 +42,22 @@ const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
             <span className="navLabel desktopOnly">{t("common:upload")}</span>
           </div>
         </Link>
-        <div className="desktopOnly">
-          <Link href="/queue" className={`navOption ${basePath === "queue" ? "current" : ""}`}
-              aria-label="Upload"
-              tabIndex={1}>
-            <div>
-              {/* <div className="feather-icon icon-upload"></div> */}
-              {/* <i className="typcn typcn-equals"></i> */}
-              <GridFourIcon />
-              <span className="navLabel desktopOnly">{t("common:queue")}</span>
-            </div>
-          </Link>
-        </div>
+        <Link href="/queue" className={`navOption ${basePath === "queue" ? "current" : ""}`}
+            aria-label="Queue"
+            tabIndex={1}>
+          <div>
+            <ListIcon size={32} />
+            <span className="navLabel desktopOnly">{t("common:queue")}</span>
+          </div>
+        </Link>
+        <Link href="/popular" className={`navOption ${basePath === "popular" ? "current" : ""}`}
+            aria-label="Popular"
+            tabIndex={1}>
+          <div>
+            <GridFourIcon size={32} />
+            <span className="navLabel desktopOnly">{t("common:popular")}</span>
+          </div>
+        </Link>
         <Link href="/profile" className={`navOption ${basePath === "profile" ? "current" : ""}`}
             aria-label="Profile"
             tabIndex={2}>

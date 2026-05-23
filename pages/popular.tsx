@@ -1,45 +1,40 @@
 import type { NextPage } from "next";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import useSWR, { SWRConfig } from "swr";
-import { motion, useAnimation } from "framer-motion";
+import { motion } from "framer-motion";
 import Utilities from "@/lib";
-import ContentInformation from "../components/post/ContentInformation/ContentInformation";
 import ContentViewer from "../components/post/ContentViewer/ContentViewer";
-import ImpressionGrid from "../components/queue/ImpressionGrid/ImpressionGrid";
 import PrimaryHeader from "../components/layout/PrimaryHeader/PrimaryHeader";
 import PrimaryNavigation from "../components/layout/PrimaryNavigation/PrimaryNavigation";
-import {
-  QueueContext,
-  QueueContextReducer,
-  QueueContextState,
-} from "../context/QueueContext/QueueContext";
 import { useUnreadThreads } from "../hooks/useUnreadThreads";
 import { PopularInterests } from "./interests";
 import { NextSeo } from "next-seo";
 import BrandName from "../components/layout/BrandName/BrandName";
 import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
-import nextI18NextConfig from "../next-i18next.config.js";
 import { useTranslation } from "next-i18next/pages";
 import LanguagePicker from "../components/queue/LanguagePicker/LanguagePicker";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import Masonry from "react-responsive-masonry";
+import useInfiniteScroll from "react-infinite-scroll-hook";
 import apiClient from "../helpers/APIClient";
 import InterestsSlider from "@/components/queue/PickerButton/InterestsSlider";
+import nextI18nextConfig from "@/next-i18next.config";
 
-const getPostsAndUserData = async (token, interestId = null, categoryId = null) => {
-
+const getPopularData = async (token, interestId = null, categoryId = null) => {
   let userData = null;
   if (token) {
     apiClient.setupClient(token);
     userData = await apiClient.get("/user");
   }
 
-  console.info("getPostsAndUserData interestId", interestId, "categoryId", categoryId);
+  console.info("getPopularData interestId", interestId, "categoryId", categoryId);
 
-  const postsData = await apiClient.get("/posts", {
+  const explorePostsData = await apiClient.get("/posts", {
     interestId,
     categoryId,
-    mode: "queue",
+    page: 1,
   });
 
   let userThreadData = null;
@@ -54,17 +49,15 @@ const getPostsAndUserData = async (token, interestId = null, categoryId = null) 
     threads = userThreadData;
   }
 
-  const returnData = {
+  return {
     currentUser: userData,
-    posts: postsData,
+    explorePosts: explorePostsData,
     threads,
     categoriesAndInterestsData,
   };
-
-  return returnData;
 };
 
-const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCategory }) => {
+const PopularContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCategory }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const [cookies, setCookie] = useCookies(["coUserToken", "coFavInt", "coPWA"]);
@@ -78,8 +71,8 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
 
   const { data, mutate } = useSWR(
-    ["queueKey", token, selectedInterest?.id, selectedCategory?.id],
-    () => getPostsAndUserData(token, selectedInterest?.id, selectedCategory?.id),
+    ["popularKey", token, selectedInterest?.id, selectedCategory?.id],
+    () => getPopularData(token, selectedInterest?.id, selectedCategory?.id),
     {
       revalidateIfStale: true,
       revalidateOnFocus: true,
@@ -91,11 +84,9 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
     mutate();
   }, [selectedInterest, selectedCategory]);
 
-  const firstId = data?.posts[0]?.id;
-
-  const [queuePostId, setQueuePostId] = useState(firstId); // defaults to first post
-  const [queueFinished, setQueueFinished] = useState(firstId ? false : true);
-  const [currentImpression, setCurrentImpression] = useState("");
+  const [exploreHasMore, setExploreHasMore] = useState(true);
+  const [explorePostsPage, setExplorePostsPage] = useState(1);
+  const [explorePostsData, setExplorePostsData] = useState<any[]>([]);
   const [showInterestsModal, setShowInterestsModal] = useState(false);
   const [showLanguageModal, setShowLanguageModal] = useState(
     !coUserLng && token ? true : false
@@ -103,108 +94,37 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
   const [showFavoriteInterestModal, setShowFavoriteInterestModal] = useState(
     !coFavInt && token ? true : false
   );
-  const [creditUi, setCreditUi] = useState(data?.currentUser?.credit);
-  const [impressionsEnabled, setImpressionsEnabled] = useState(true);
 
-  const postAnimation = useAnimation();
-  const betweenPostAnimation = useAnimation();
-  const queueAnimation = useAnimation();
+  const loadMoreExploreItems = async () => {
+    const newPage = explorePostsPage + 1;
+    const addtPostsData = await apiClient.get("/posts", {
+      interestId: selectedInterest?.id,
+      categoryId: selectedCategory?.id,
+      page: newPage,
+    });
+
+    console.info("popular explorePostsData", addtPostsData, explorePostsData);
+
+    setExploreHasMore(
+      addtPostsData.length === 20 ? true : false
+    );
+    setExplorePostsPage(newPage);
+    setExplorePostsData([
+      ...explorePostsData,
+      ...addtPostsData,
+    ]);
+  };
+
+  const [sentryRef, { rootRef }] = useInfiniteScroll({
+    loading: false,
+    hasNextPage: exploreHasMore,
+    onLoadMore: loadMoreExploreItems,
+    rootMargin: "0px 0px 100px 0px",
+  });
 
   useEffect(() => {
-    betweenPostAnimation.set((i) => ({
-      opacity: 0,
-      y: -5,
-    }));
-
-    postAnimation.start((i) => ({
-      opacity: 1,
-      y: 0,
-    }));
-
-    queueAnimation.start((i) => ({
-      opacity: 1,
-      y: 0,
-    }));
-  }, []);
-
-  useEffect(() => {
-    setQueuePostId(firstId);
-    setQueueFinished(firstId ? false : true);
-  }, [firstId]);
-
-  // get currentPost via id
-  const currentPost = data?.posts?.filter(
-    (post) => post.id === queuePostId
-  )[0];
-
-  const closeQueueItemAnimation = async () => {
-    await postAnimation.start((i) => ({
-      opacity: 0,
-      y: 5,
-      transition: { duration: 0.5 },
-    }));
-
-    await betweenPostAnimation.start((i) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: 0.5, duration: 0.5 },
-    }));
-  };
-
-  const openQueueItemAnimation = async () => {
-    await betweenPostAnimation.start((i) => ({
-      opacity: 0,
-      y: -5,
-      transition: { duration: 0.5 },
-    }));
-    await postAnimation.start((i) => ({
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    }));
-  };
-
-  const impressionClickHandler = async (impression) => {
-    if (queueFinished) {
-      return;
-    }
-    if (!impressionsEnabled) {
-      alert(t("common:messages.pleaseView5Seconds"));
-      return;
-    }
-
-    setImpressionsEnabled(false);
-
-    setCreditUi(creditUi + 1);
-    setCurrentImpression(impression);
-
-    await closeQueueItemAnimation();
-
-    setTimeout(async () => {
-      mutate(() => getPostsAndUserData(token, selectedInterest?.id, selectedCategory?.id));
-      const postCreatorUsername = currentPost?.creator?.generatedUsername;
-
-      await apiClient.post("/impressions", {
-        content: impression,
-        postCreatorUsername,
-        postId: currentPost?.id,
-      });
-
-      setTimeout(async () => {
-        await openQueueItemAnimation();
-        setCurrentImpression("");
-
-        setTimeout(() => {
-          setImpressionsEnabled(true);
-        }, 4000);
-      }, 1000);
-    }, 500);
-  };
-
-  const { unreadThreads, unreadThreadCount } = useUnreadThreads(
-    data?.threads,
-    data?.currentUser?.generatedUsername
-  );
+    setExplorePostsData(data?.explorePosts || []);
+  }, [data]);
 
   const onCloseInterests = () => {
     setShowInterestsModal(false);
@@ -215,19 +135,13 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
     setSelectedInterest(interest);
     setSelectedCategory(category);
 
-    await mutate(() => getPostsAndUserData(token, interest?.id, category?.id));
-
-    await postAnimation.start((i) => ({
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    }));
-
-    await queueAnimation.start((i) => ({
-      opacity: 1,
-      y: 0,
-    }));
+    await mutate(() => getPopularData(token, interest?.id, category?.id));
   };
+
+  const { unreadThreads, unreadThreadCount } = useUnreadThreads(
+    data?.threads,
+    data?.currentUser?.generatedUsername
+  );
 
   return (
     <>
@@ -283,9 +197,10 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
       ) : (
         <></>
       )}
+      
       <section className="queue">
         <div className="queueInner">
-          <NextSeo title={`Queue | CommonPlace`} />
+          <NextSeo title={`Popular | CommonPlace`} />
           <section className="desktopOnly">
             <InterestsSlider
               interestsByCategory={interestsByCategory}
@@ -322,86 +237,64 @@ const QueueContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCatego
             }
           />
           <motion.div
-            className="animationContainer queueAnimationContainer"
-            animate={queueAnimation}
-            initial={{ opacity: 0 }}
+            className="animationContainer"
+            initial={{ opacity: 1 }}
+            ref={rootRef}
+            style={{ 
+              paddingTop: "65px",
+              paddingBottom: "85px", 
+              paddingLeft: "90px",
+              overflowY: "auto", 
+              height: "calc(100vh - 80px)",
+              margin: "0 10px"
+            }}
           >
-            <main className="scrollContainer queueScrollContainer">
-              {!queueFinished ? (
-                <div className="displayPost currentPost">
-                  <motion.div
-                    custom={0}
-                    animate={postAnimation}
-                  >
-                    <ContentViewer
-                      type={currentPost?.contentType}
-                      preview={currentPost?.contentPreview}
-                      content={currentPost?.content}
-                    />
-                  </motion.div>
-                  <motion.div
-                    custom={1}
-                    animate={postAnimation}
-                  >
-                    <ContentInformation queue={true} post={currentPost} />
-                  </motion.div>
-                </div>
-              ) : (
-                <div className="emptyMessage queueEmptyMessage">
-                  <span>{t("common:empty.queue")}</span>
-                </div>
-              )}
-            </main>
-
-            <ImpressionGrid
-              creditCount={creditUi}
-              onClick={impressionClickHandler}
-            />
+            <Masonry columnsCount={3} gutter="4px">
+              {explorePostsData?.map((post) => (
+                <Link
+                  key={post.id}
+                  href={`/post/${post?.interest?.generatedInterestSlug}/${post?.generatedTitleSlug}`}
+                  style={{ display: "block", textDecoration: "none" }}
+                >
+                  <ContentViewer
+                    alt={post?.title || ""}
+                    type={post.contentType}
+                    preview={post.contentPreview}
+                    content={post.content}
+                    mini={true}
+                  />
+                </Link>
+              ))}
+            </Masonry>
+            <div className="sentry" ref={sentryRef} style={{ height: "40px" }}></div>
           </motion.div>
         </div>
-        {currentImpression !== "" ? (
-          <motion.div
-            custom={1}
-            initial={{ opacity: 0, y: -5 }}
-            animate={betweenPostAnimation}
-          >
-            <div className="fullscreenMessage">
-              <span>{currentImpression}</span>
-            </div>
-          </motion.div>
-        ) : (
-          <></>
-        )}
       </section>
     </>
   );
 };
 
-const Queue: NextPage<{
+const Popular: NextPage<{
   fallback: any;
   coUserLng: string;
   coFavInt: string;
   favoriteInterest: string;
 }> = ({ fallback, coUserLng, coFavInt, favoriteInterest, interestsByCategory }) => {
-  const [state, dispatch] = useReducer(QueueContextReducer, QueueContextState);
-
   return (
-    <QueueContext.Provider value={{ state, dispatch }}>
-      <SWRConfig
-        value={{ fallback, revalidateOnMount: true, refreshWhenHidden: true }}
-      >
-        <QueueContent
-          coUserLng={coUserLng}
-          coFavInt={coFavInt}
-          favoriteInterest={favoriteInterest}
-          interestsByCategory={interestsByCategory}
-        />
-      </SWRConfig>
-    </QueueContext.Provider>
+    <SWRConfig
+      value={{ fallback, revalidateOnMount: true, refreshWhenHidden: true }}
+    >
+      <PopularContent
+        coUserLng={coUserLng}
+        coFavInt={coFavInt}
+        favoriteInterest={favoriteInterest}
+        interestsByCategory={interestsByCategory}
+      />
+    </SWRConfig>
   );
 };
 
-export default Queue;
+export default Popular;
 
 export async function getServerSideProps(context) {
   const utilities = new Utilities();
@@ -411,7 +304,7 @@ export async function getServerSideProps(context) {
   const favoriteInterestId =
     typeof cookieData.coFavInt !== "undefined" ? cookieData.coFavInt : null;
 
-  const returnData = await getPostsAndUserData(token, favoriteInterestId);
+  const returnData = await getPopularData(token, favoriteInterestId);
 
   const category = returnData.categoriesAndInterestsData.getCategories.filter(
     (category) =>
@@ -443,10 +336,10 @@ export async function getServerSideProps(context) {
       ...(await serverSideTranslations(
         locale,
         ["interests", "impressions", "settings", "common"],
-        nextI18NextConfig
+        nextI18nextConfig
       )),
       fallback: {
-        queueKey: returnData,
+        popularKey: returnData,
       },
     },
   };
