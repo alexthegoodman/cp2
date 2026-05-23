@@ -50,6 +50,11 @@ export default async function handler(
           include: {
             creator: true,
             interest: true,
+            messages: {
+              where: {
+                type: "impression"
+              }
+            }
           },
           take: 1,
         });
@@ -57,6 +62,15 @@ export default async function handler(
         // Default: Explore
         posts = await prisma.post.findMany({
           where: whereClause,
+          include: {
+            creator: true,
+            interest: true,
+            messages: {
+              where: {
+                type: "impression"
+              }
+            }
+          },
           orderBy: { createdAt: "desc" },
           take: 20,
           skip: 20 * (p - 1),

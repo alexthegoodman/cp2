@@ -21,6 +21,8 @@ import useInfiniteScroll from "react-infinite-scroll-hook";
 import apiClient from "../helpers/APIClient";
 import InterestsSlider from "@/components/queue/PickerButton/InterestsSlider";
 import nextI18nextConfig from "@/next-i18next.config";
+import ContentInformation from "@/components/post/ContentInformation/ContentInformation";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 const getPopularData = async (token, interestId = null, categoryId = null) => {
   let userData = null;
@@ -143,6 +145,8 @@ const PopularContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCate
     data?.currentUser?.generatedUsername
   );
 
+  const windowSize = useWindowSize();
+
   return (
     <>
       {showInterestsModal ? (
@@ -243,19 +247,21 @@ const PopularContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCate
             style={{ 
               paddingTop: "65px",
               paddingBottom: "85px", 
-              paddingLeft: "90px",
+              // paddingLeft: "90px",
+              paddingLeft: windowSize.width > 600 ? "90px" : "0px",
               overflowY: "auto", 
               height: "calc(100vh - 80px)",
               margin: "0 10px"
             }}
           >
-            <Masonry columnsCount={3} gutter="4px">
+            <Masonry columnsCount={windowSize.width > 600 ? 4 : 2} gutter={windowSize.width > 600 ? "12px" : "4px"}>
               {explorePostsData?.map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/post/${post?.interest?.generatedInterestSlug}/${post?.generatedTitleSlug}`}
-                  style={{ display: "block", textDecoration: "none" }}
-                >
+                // <Link
+                //   key={post.id}
+                //   href={`/post/${post?.interest?.generatedInterestSlug}/${post?.generatedTitleSlug}`}
+                //   style={{ display: "block", textDecoration: "none" }}
+                // >
+                <div>
                   <ContentViewer
                     alt={post?.title || ""}
                     type={post.contentType}
@@ -263,7 +269,9 @@ const PopularContent = ({ coUserLng, coFavInt, favoriteInterest, interestsByCate
                     content={post.content}
                     mini={true}
                   />
-                </Link>
+                  <ContentInformation queue={true} post={post} bottomSpacing={false} />
+                </div>
+                // </Link>
               ))}
             </Masonry>
             <div className="sentry" ref={sentryRef} style={{ height: "40px" }}></div>

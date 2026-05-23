@@ -15,6 +15,7 @@ const ContentInformation: React.FC<ContentInformationProps> = ({
   onClick = (e) => console.info("Click ContentInformation"),
   queue = false,
   post = null,
+  bottomSpacing = true,
 }) => {
   const clickHandler = (e: MouseEvent) => onClick(e);
   const displayDate = DateTime.fromISO(post?.createdAt).toUTC().toFormat("DDD");
@@ -29,9 +30,11 @@ const ContentInformation: React.FC<ContentInformationProps> = ({
   //   }
   // );
 
+  console.info("post", post)
+
   return (
     <section className="contentInformation">
-      <div className="contentInformationInner">
+      <div className={`contentInformationInner ${bottomSpacing ? "bottomSpace": ""}`}>
         <div className="contentHeader">
           <h2 className="contentTitle">{post?.title}</h2>
           <PostInteraction post={post} />
