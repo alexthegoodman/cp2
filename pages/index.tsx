@@ -11,9 +11,63 @@ import LandingSocialProof from "../components/landing/LandingSocialProof";
 import LandingFooter from "../components/landing/LandingFooter";
 import LandingInterests from "../components/landing/LandingInterests";
 import LandingFAQ from "../components/landing/LandingFAQ";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { useCookies } from "react-cookie";
+import { DateTime } from "luxon";
+import { nanoid } from "nanoid";
+import apiClient from "../helpers/APIClient";
+import { CookieSettings } from "./settings";
 
 const Home: NextPage<any> = ({ recentPosts = [], categories = [] }) => {
   const canonicalUrl = "https://" + cpDomain;
+  const router = useRouter();
+  const [cookies, setCookie] = useCookies(["coUserToken"]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGuestLogin = async () => {
+    setIsLoading(true);
+    try {
+      const utilities = new Utilities();
+      const rand = nanoid(8);
+      const email = `guest-${rand}@commonplace.exchange`;
+      const password = `guest-pass-${rand}`;
+
+      const authorizationHeader = utilities.helpers.createAuthHeader(
+        `${email}:${password}`
+      );
+
+      const response = await apiClient.post(
+        "/user",
+        {},
+        {
+          headers: {
+            Authorization: authorizationHeader,
+          },
+        }
+      );
+
+      const token = response.token;
+
+      const expireCookie = DateTime.now()
+        .plus({ weeks: 1 })
+        .endOf("day")
+        .toUTC()
+        .toJSDate();
+
+      setCookie("coUserToken", token, {
+        ...CookieSettings,
+        expires: expireCookie,
+      });
+
+      router.push("/queue");
+    } catch (error) {
+      console.error("Guest login failed:", error);
+      alert("Something went wrong during guest login. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <main className="landingContainer">
@@ -41,13 +95,21 @@ const Home: NextPage<any> = ({ recentPosts = [], categories = [] }) => {
       >
         <>
           
-          <a href="/sign-up" className="button">
-            Sign Up
-          </a>
-          <a href="/sign-in" className="button">
-            Sign In
+          <button
+            onClick={handleGuestLogin}
+            disabled={isLoading}
+            className="button"
+          >
+            {isLoading ? "Loading..." : "Use as Guest"}
+          </button>
+          <a href="/sign-up" className="guestButton ">
+            Create Account
           </a>
           {/* <LandingSocialProof /> */}
+          <span style={{ display: "block", marginTop: "16px" }}>Or <a href="/sign-in">
+            Sign In
+          </a></span>
+          
         </>
       </LandingHeroA>
       

@@ -60,6 +60,32 @@ $inputGrey: #ececec;
   font-weight: 400;
 }
 
+.guestButton {
+  @extend .button;
+  background: transparent;
+  color: #2a2a2a;
+  border: 2px solid #2a2a2a;
+  font-size: 22px;
+  padding: 16px 0;
+  cursor: pointer;
+  
+  &:hover {
+    background: rgba(42, 42, 42, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    background: transparent;
+    cursor: not-allowed;
+  }
+}
+
 .circleButton {
   outline: none;
   background: none;
